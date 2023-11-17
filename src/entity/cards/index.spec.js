@@ -4,7 +4,7 @@ const {
     isValidCardSetSequence
 } = require('./index');
 
-describe('Cards', () => {
+describe('Entity/Cards', () => {
     const cardPack = shuffleCards(cards);
 
     test('generation and shuffle', () => {
