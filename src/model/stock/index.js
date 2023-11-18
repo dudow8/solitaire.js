@@ -1,11 +1,36 @@
-// stock starts with no active card
-// stock active cards flips as a carousel
-// one active card per time
-// after moving one card from stock, the current card needs to be index-1, or null
-// after moved to foundation or tableau, cards can't be moved back to stock
+const selectNextIndex = (pile, active_index) => {
+    if (active_index === null)
+        return 0;
 
-const flipStockCard = () => {
-    // TODO
+    if (active_index + 1 < pile.length)
+        return active_index + 1
+
+    return null;
+}
+
+const selectNextActiveCard = (pile, active_index) => {
+    if (active_index !== null) {
+        return pile[active_index];
+    }
+
+    return null;
+};
+
+const flipStockCard = (state) => {
+    if (state.pile.length) {
+        const active_index = selectNextIndex(state.pile, state.active.index);
+        const active_card = selectNextActiveCard(state.pile, active_index);
+
+        return {
+            type: 'stock/stock-card-flipped',
+            payload: {
+                active_index,
+                active_card,
+            }
+        }
+    }
+
+    return null;
 };
 
 module.exports = {
