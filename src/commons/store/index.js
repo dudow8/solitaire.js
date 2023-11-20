@@ -1,4 +1,12 @@
-const reduces = require('../reduces');
+const eventStore = [];
+
+const dispatch = (event) => {
+    eventStore.push(event);
+};
+
+const getEventStore = () => {
+    return Array.from(eventStore);
+}
 
 const computeState = (state = {}, events, reduces) => {
     const stateObjectKeys = Object.keys(reduces);
@@ -16,21 +24,10 @@ const computeState = (state = {}, events, reduces) => {
             return snapshot;
         }, state);
     }, state);
-}
-
-const eventStore = [];
-
-const dispatch = (event) => {
-    eventStore.push(event);
-};
-
-const getSnapshot = (state = {}) => {
-    const snapshot = computeState(state, eventStore, reduces);
-    return Object.freeze(snapshot);
 };
 
 module.exports = {
-    computeState,
-    getSnapshot,
     dispatch,
+    getEventStore,
+    computeState,
 };
