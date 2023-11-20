@@ -6,6 +6,10 @@ const dispatch = (event) => {
 
 const getEventStore = () => {
     return Array.from(eventStore);
+};
+
+const dropEventStore = () => {
+    eventStore.length = 0;
 }
 
 const computeState = (state = {}, events, reduces) => {
@@ -30,4 +34,5 @@ module.exports = {
     dispatch,
     getEventStore,
     computeState,
+    dropEventStore,
 };
