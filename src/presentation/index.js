@@ -1,8 +1,9 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
+import { Solitaire } from './components';
 
 const App = () => (
-    <h1>Solitaire</h1>
+    <Solitaire />
 )
 
 const root = createRoot(document.getElementById("root"));
