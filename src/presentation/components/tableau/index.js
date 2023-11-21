@@ -5,22 +5,21 @@ import Card from '../card';
 
 const Tableau = () => {
     const tableau = useSolitaireState('tableau');
-    const piles = [1, 2, 3, 4, 5, 6, 7];
+    const piles = Object.keys(tableau.piles);
 
     return (
         <Container>
-            {piles.map((pile, key) => (
-                <Pile key={key}>
-                    {tableau.piles[pile].map((card, key) =>
+            {piles.map((pile, pile_index) => (
+                <Pile key={pile_index}>
+                    {tableau.piles[pile].map((card, card_index) =>
                         <Card
-                            key={key}
+                            key={card_index}
                             label={card.value}
                             suit={card.suit}
-                            flipped={true}/>
+                            flipped={card.flipped} />
                     )}
                 </Pile>
             ))}
-
         </Container>
     );
 };

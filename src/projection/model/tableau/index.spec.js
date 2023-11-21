@@ -11,6 +11,7 @@ describe('Projection/Tableau', () => {
         index: 1,
         value: '2',
         suit: 'heart',
+        flipped: true,
     };
     const spadeTwoCard = {
         index: 1,
@@ -26,12 +27,13 @@ describe('Projection/Tableau', () => {
         index: 0,
         value: 'KING',
         suit: 'spade',
+        flipped: true,
     };
 
     describe('gameInitialized', () => {
         const gameInitialized = TableauProjection['solitaire/game-initialized'];
 
-        test('valid event data', () => {
+        test('Should have a correct tableau structure after game initialized', () => {
             const event = Game.initializeGame();
             const snapshot = gameInitialized({}, event);
 
@@ -48,13 +50,13 @@ describe('Projection/Tableau', () => {
     describe('cardStackMovedBetweenTableauPiles', () => {
         const cardStackMovedBetweenTableauPiles = TableauProjection['tableau/card-stack-moved-between-tableau-piles'];
 
-        test('valid event data', () => {
+        test('Should move the cards to the new tableau pile', () => {
             const state = {
                 piles: {
                     1: [spadeTwoCard, heartAceCard],
                     2: [heartThreeCard],
                 }
-            }
+            };
             const event = {
                 payload: {
                     from_pile: 1,
@@ -69,6 +71,31 @@ describe('Projection/Tableau', () => {
             expect(snapshot.piles[1].length).toBe(0);
             expect(snapshot.piles[2].length).toBe(3);
             expect(snapshot.piles[2]).toEqual([heartThreeCard, spadeTwoCard, heartAceCard]);
+        });
+
+        test('Should flip the top card after moving a card', () => {
+            const state = {
+                piles: {
+                    1: [heartTwoCard, spadeKingCard, spadeTwoCard, heartAceCard],
+                    2: [heartThreeCard],
+                }
+            };
+            const event = {
+                payload: {
+                    from_pile: 1,
+                    from_pile_card_position: 2,
+                    to_pile: 2,
+                    card_stack: [spadeTwoCard, heartAceCard],
+                }
+            };
+
+            const snapshot = cardStackMovedBetweenTableauPiles(state, event);
+
+            expect(snapshot.piles[1].length).toBe(2);
+            expect(snapshot.piles[2].length).toBe(3);
+            expect(snapshot.piles[2]).toEqual([heartThreeCard, spadeTwoCard, heartAceCard]);
+            expect(snapshot.piles[1][0].flipped).toBe(true);
+            expect(snapshot.piles[1][1].flipped).toBe(false);
         });
     });
 
@@ -123,7 +150,7 @@ describe('Projection/Tableau', () => {
     describe('cardMovedFromTableauToFoundation', () => {
         const cardMovedFromTableauToFoundation = TableauProjection['foundation/card-moved-from-tableau-to-foundation'];
 
-        test('valid event data', () => {
+        test('Should move out the card from tableau pile', () => {
             const state = {
                 piles: {
                     1: [spadeTwoCard],
@@ -141,6 +168,48 @@ describe('Projection/Tableau', () => {
             const snapshot = cardMovedFromTableauToFoundation(state, event);
             expect(snapshot.piles[1].length).toBe(0);
             expect(snapshot.piles[2].length).toBe(1);
+        });
+
+        test('Should flip the top card after moving a card', () => {
+            const state = {
+                piles: {
+                    1: [spadeKingCard, heartTwoCard, spadeTwoCard],
+                    2: [heartThreeCard],
+                }
+            }
+            const event = {
+                payload: {
+                    tableau_pile: 1,
+                    foundation_pile: 2,
+                    card: spadeTwoCard,
+                }
+            };
+
+            const snapshot = cardMovedFromTableauToFoundation(state, event);
+            expect(snapshot.piles[1].length).toBe(2);
+            expect(snapshot.piles[2].length).toBe(1);
+            expect(snapshot.piles[1][0].flipped).toBe(true);
+            expect(snapshot.piles[1][1].flipped).toBe(false);
+        });
+
+        test('Should not throw an error after moving a card from pile and have no remaing card to flip', () => {
+            const state = {
+                piles: {
+                    1: [spadeTwoCard],
+                    2: [heartThreeCard],
+                }
+            }
+            const event = {
+                payload: {
+                    tableau_pile: 1,
+                    foundation_pile: 0,
+                    card: spadeTwoCard,
+                }
+            };
+
+            expect(() => {
+                const snapshot = cardMovedFromTableauToFoundation(state, event);
+            }).not.toThrowError();
         });
     });
 });

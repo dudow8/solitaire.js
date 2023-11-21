@@ -20,21 +20,25 @@ const cards = [
         index,
         value,
         suit: 'heart',
+        flipped: false,
     })),
     ...set.map((value, index) => ({
         index,
         value,
         suit: 'spade',
+        flipped: false,
     })),
     ...set.map((value, index) => ({
         index,
         value,
         suit: 'club',
+        flipped: false,
     })),
     ...set.map((value, index) => ({
         index,
         value,
         suit: 'diamond',
+        flipped: false,
     })),
 ];
 
