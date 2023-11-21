@@ -1,8 +1,10 @@
-import React, { useSyncExternalStore } from 'react';
-import { styled, createGlobalStyle } from 'styled-components';
-import useSolitaireState from '../../hooks';
+import React from 'react';
+import styled, { createGlobalStyle } from 'styled-components';
 import { newGame } from '../../../application/index';
-import Card from '../card';
+
+import Tableau from '../tableau';
+import Foundation from '../foundation';
+import Stock from '../stock';
 
 const GlobalStyle = createGlobalStyle`
     html, body {
@@ -16,24 +18,41 @@ const GlobalStyle = createGlobalStyle`
         position: fixed;
         width: 100vw;
         height: 100vh;
-        background-color: darkgreen;
+        background-color: #1A4314;
+        display: flex;
+        justify-content: center;
+
+        > div {
+            /* transform: scale(65%);
+            transform-origin: top left; */
+        }
     }
+`;
+
+const GameLayout = styled.div`
+    display: flex;
+    flex-direction: column;
+    height: auto;
+`;
+
+const GameLayoutHead = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
 `;
 
 newGame();
 
 const Solitaire = () => {
-    const tableau = useSolitaireState('tableau');
     return (
-        <>
+        <GameLayout>
             <GlobalStyle />
-            {tableau.piles[7].map((card, key) =>
-                <Card
-                    key={key}
-                    label={card.value}
-                    suit={card.suit} />
-            )}
-        </>
+            <GameLayoutHead>
+                <Foundation />
+                <Stock />
+            </GameLayoutHead>
+            <Tableau />
+        </GameLayout>
     );
 }
 

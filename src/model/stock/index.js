@@ -17,9 +17,10 @@ const selectNextActiveCard = (pile, active_index) => {
 };
 
 const flipStockCard = (state) => {
-    if (state.pile.length) {
-        const active_index = selectNextIndex(state.pile, state.active.index);
-        const active_card = selectNextActiveCard(state.pile, active_index);
+    const stock = state.stock;
+    if (stock.pile.length) {
+        const active_index = selectNextIndex(stock.pile, stock.active.index);
+        const active_card = selectNextActiveCard(stock.pile, active_index);
 
         return {
             type: 'stock/stock-card-flipped',

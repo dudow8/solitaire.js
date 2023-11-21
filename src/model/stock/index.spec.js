@@ -22,11 +22,13 @@ describe('Model/Stock', () => {
     describe('flipStockCard()', () => {
         test('with no active card', () => {
             const state = {
-                active: {
-                    card: null,
-                    index: null,
-                },
-                pile: [heartAceCard, heartTwoCard, heartTreeCard]
+                stock: {
+                    active: {
+                        card: null,
+                        index: null,
+                    },
+                    pile: [heartAceCard, heartTwoCard, heartTreeCard]
+                }
             };
 
             const event = flipStockCard(state);
@@ -36,11 +38,13 @@ describe('Model/Stock', () => {
 
         test('with previous active card', () => {
             const state = {
-                active: {
-                    card: heartTwoCard,
-                    index: 1,
-                },
-                pile: [heartAceCard, heartTwoCard, heartTreeCard]
+                stock: {
+                    active: {
+                        card: heartTwoCard,
+                        index: 1,
+                    },
+                    pile: [heartAceCard, heartTwoCard, heartTreeCard]
+                }
             };
 
             const event = flipStockCard(state);
@@ -50,11 +54,13 @@ describe('Model/Stock', () => {
 
         test('with last card in the pile active', () => {
             const state = {
-                active: {
-                    card: heartTreeCard,
-                    index: 2,
-                },
-                pile: [heartAceCard, heartTwoCard, heartTreeCard]
+                stock: {
+                    active: {
+                        card: heartTreeCard,
+                        index: 2,
+                    },
+                    pile: [heartAceCard, heartTwoCard, heartTreeCard]
+                }
             };
 
             const event = flipStockCard(state);
@@ -64,11 +70,13 @@ describe('Model/Stock', () => {
 
         test('with one card in the pile', () => {
             const state = {
-                active: {
-                    card: heartAceCard,
-                    index: 0,
-                },
-                pile: [heartAceCard]
+                stock: {
+                    active: {
+                        card: heartAceCard,
+                        index: 0,
+                    },
+                    pile: [heartAceCard]
+                }
             };
 
             const event = flipStockCard(state);
@@ -78,11 +86,13 @@ describe('Model/Stock', () => {
 
         test('with no cards in the pile', () => {
             const state = {
-                active: {
-                    card: null,
-                    index: null,
-                },
-                pile: []
+                stock: {
+                    active: {
+                        card: null,
+                        index: null,
+                    },
+                    pile: []
+                }
 
             };
             const event = flipStockCard(state);
