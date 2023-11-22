@@ -8,8 +8,15 @@ const suitSymbol = {
     spade: '♠',
 };
 
-const Card = ({ label, suit, flipped = false }) => (
-    <S.Container $suit={suit}>
+const Card = ({ label, suit, flipped = false, draggable = false, ondrag = null }) => (
+    <S.Container
+        $suit={suit}
+        draggable={draggable}
+        onDragStart={(e) => {
+            if (draggable && typeof ondrag === 'function') {
+                ondrag(e);
+            }
+        }}>
         {!flipped &&
             <S.Face>
                 <S.FaceHeadline>

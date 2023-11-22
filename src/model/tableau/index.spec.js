@@ -7,7 +7,7 @@ const {
 describe('Model/Tableau', () => {
     const heartAceCard = {
         index: 0,
-        value: 'ACE',
+        value: 'A',
         suit: 'heart',
     };
     const heartTwoCard = {
@@ -27,7 +27,7 @@ describe('Model/Tableau', () => {
     };
     const spadeKingCard = {
         index: 0,
-        value: 'KING',
+        value: 'K',
         suit: 'spade',
     };
 

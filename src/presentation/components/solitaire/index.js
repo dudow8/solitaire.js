@@ -38,7 +38,7 @@ const GameLayout = styled.div`
 const GameLayoutHead = styled.div`
     display: flex;
     justify-content: space-between;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 `;
 
 newGame();

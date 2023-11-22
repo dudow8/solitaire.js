@@ -12,7 +12,7 @@ const isValidFoundationCardSuitSequence = (bottomCard, topCard) => {
 };
 
 const isValidFoundationSequence = (bottomCard, topCard) => {
-    if (!bottomCard && topCard.value === 'ACE') {
+    if (!bottomCard && topCard.value === 'A') {
         return true;
     }
 

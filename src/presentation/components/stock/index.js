@@ -1,7 +1,7 @@
 import React from "react";
 import { styled } from "styled-components";
 import Card from "../card";
-import useSolitaireState from "../../hooks";
+import { useSolitaireState } from "../../hooks";
 import { flipStockCard } from '../../../application';
 
 const Stock = () => {
@@ -12,6 +12,10 @@ const Stock = () => {
         ? stock.pile.slice(0, stock.active.index + 1)
         : [];
 
+    const ondrag = (e) => {
+        e.dataTransfer.setData("solitaire/stock-card", JSON.stringify(stock.active));
+    };
+
     return (
         <Container>
             <Waste>
@@ -19,7 +23,9 @@ const Stock = () => {
                     <Card
                         key={key}
                         label={card.value}
-                        suit={card.suit} />
+                        suit={card.suit}
+                        draggable
+                        ondrag={(e) => { ondrag(e); }} />
                 )}
             </Waste>
             <Hand onClick={flipStockCard}>

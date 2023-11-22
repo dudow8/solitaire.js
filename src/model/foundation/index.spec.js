@@ -6,7 +6,7 @@ const {
 describe('Model/Foundation', () => {
     const heartAceCard = {
         index: 0,
-        value: 'ACE',
+        value: 'A',
         suit: 'heart',
     };
     const heartTwoCard = {
@@ -149,11 +149,11 @@ describe('Model/Foundation', () => {
             const state = {
                 foundation: {
                     piles: {
-                        1: [heartAceCard]
+                        1: []
                     },
                 },
                 stock: {
-                    pile: [heartTwoCard]
+                    pile: [heartAceCard]
                 },
             };
             const move = {
@@ -163,7 +163,7 @@ describe('Model/Foundation', () => {
 
             const event = moveCardFromStockToFoundation(state, move);
             expect(event).not.toBeNull();
-            expect(event.payload.card).toEqual(heartTwoCard);
+            expect(event.payload.card).toEqual(heartAceCard);
         });
 
         test('invalid set sequence move', () => {

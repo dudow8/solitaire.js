@@ -10,4 +10,10 @@ const useSolitaireState = (selector = null) => {
     return state;
 };
 
-export default useSolitaireState;
+const useDragObject = () => {
+    
+};
+
+export {
+    useSolitaireState
+};

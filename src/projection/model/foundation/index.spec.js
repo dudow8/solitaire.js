@@ -61,7 +61,7 @@ describe('Projection/Foundation', () => {
 
     describe('cardMovedFromStockToFoundation()', () => {
         const cardMovedFromStockToFoundation = FoundationProjection['foundation/card-moved-from-stock-to-foundation'];
-        
+
         test('valid event data', () => {
             const state = {
                 piles: {
@@ -84,6 +84,31 @@ describe('Projection/Foundation', () => {
             expect(snapshot.piles[2].length).toBe(0);
             expect(snapshot.piles[3].length).toBe(0);
             expect(snapshot.piles[4].length).toBe(0);
+        });
+    });
+
+    describe('cardMovedFromFoundationToTableau', () => {
+        const cardMovedFromFoundationToTableau = FoundationProjection['tableau/card-moved-from-foundation-to-tableau'];
+
+        test('valid event data', () => {
+            const state = {
+                piles: {
+                    1: [heartAceCard],
+                    2: [],
+                    3: [],
+                    4: [],
+                }
+            };
+            const event = {
+                payload: {
+                    foundation_pile: 1,
+                    tableau_pile: 1,
+                    card: heartAceCard,
+                }
+            };
+
+            const snapshot = cardMovedFromFoundationToTableau(state, event);
+            expect(snapshot.piles[1].length).toBe(0);
         });
     });
 });

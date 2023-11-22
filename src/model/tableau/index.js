@@ -11,7 +11,7 @@ const isValidTableauCardSuitSequence = (bottomCard, topCard) => {
 }
 
 const isValidTableauSequence = (bottomCard, topCard) => {
-    if (!bottomCard && topCard.value === 'KING') {
+    if (!bottomCard && topCard.value === 'K') {
         return true;
     }
 

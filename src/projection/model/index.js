@@ -26,11 +26,13 @@ const unsubscribe = (callback) => {
 };
 
 const dispatch = (event) => {
-    store.dispatch(event);
-    cacheSnapshot(event);
-    subscribers.forEach((notify) => {
-        notify();
-    });
+    if (event) {
+        store.dispatch(event);
+        cacheSnapshot(event);
+        subscribers.forEach((notify) => {
+            notify();
+        });
+    }
 };
 
 const cacheSnapshot = (event) => {

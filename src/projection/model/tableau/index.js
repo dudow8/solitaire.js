@@ -62,9 +62,7 @@ const cardMovedFromFoundationToTableau = (state, { payload }) => {
 };
 
 const cardMovedFromTableauToFoundation = (state, { payload }) => {
-    const pile = flipPileTopCard(
-        state.piles[payload.tableau_pile].slice(0, -1))
-        ;
+    const pile = flipPileTopCard(state.piles[payload.tableau_pile].slice(0, -1));
     const piles = {
         ...state.piles,
         [payload.tableau_pile]: pile,
