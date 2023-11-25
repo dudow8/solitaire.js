@@ -5,6 +5,7 @@ import { newGame } from '../../../application/index';
 import Tableau from '../tableau';
 import Foundation from '../foundation';
 import Stock from '../stock';
+import { DragAndDropProvider } from '../../hooks';
 
 const GlobalStyle = createGlobalStyle`
     html, body {
@@ -45,14 +46,16 @@ newGame();
 
 const Solitaire = () => {
     return (
-        <GameLayout>
-            <GlobalStyle />
-            <GameLayoutHead>
-                <Foundation />
-                <Stock />
-            </GameLayoutHead>
-            <Tableau />
-        </GameLayout>
+        <DragAndDropProvider>
+            <GameLayout>
+                <GlobalStyle />
+                <GameLayoutHead>
+                    <Foundation />
+                    <Stock />
+                </GameLayoutHead>
+                <Tableau />
+            </GameLayout>
+        </DragAndDropProvider>
     );
 }
 

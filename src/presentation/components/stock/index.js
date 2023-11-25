@@ -1,11 +1,12 @@
 import React from "react";
 import { styled } from "styled-components";
 import Card from "../card";
-import { useSolitaireState } from "../../hooks";
+import { useSolitaireState, useDragAndDropContext } from "../../hooks";
 import { flipStockCard } from '../../../application';
 
 const Stock = () => {
     const stock = useSolitaireState('stock');
+    const dragAndDrop = useDragAndDropContext();
 
     const hand = stock.pile.slice(stock.active.index !== null
         ? stock.active.index + 1
@@ -16,7 +17,8 @@ const Stock = () => {
         : [];
 
     const ondrag = (e) => {
-        e.dataTransfer.setData("solitaire/stock-card", JSON.stringify(stock.active));
+        const payload = stock.active;
+        dragAndDrop.drag('solitaire/stock-card', payload);
     };
 
     return (

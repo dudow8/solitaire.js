@@ -1,6 +1,9 @@
 import React from 'react';
 import { styled } from 'styled-components';
-import { useSolitaireState } from '../../hooks';
+import {
+    useSolitaireState,
+    useDragAndDropContext,
+} from '../../hooks';
 import {
     moveCardStackBetweenTableauPiles,
     moveCardFromStockToTableau,
@@ -10,45 +13,48 @@ import Card from '../card';
 
 const Tableau = () => {
     const tableau = useSolitaireState('tableau');
+    const dragAndDrop = useDragAndDropContext();
     const piles = Object.keys(tableau.piles);
 
     const ondrag = (e, pile, card_position) => {
-        const data = {
+        const payload = {
             pile,
             card_position,
         };
-        e.dataTransfer.setData("solitaire/tableau-card", JSON.stringify(data));
+        dragAndDrop.drag('solitaire/tableau-card', payload)
     };
 
     const ondrop = (e, to_tableau_pile_index) => {
         e.preventDefault();
         e.stopPropagation();
 
-        const stockMove = e.dataTransfer.getData("solitaire/stock-card");
-        const foundationMove = e.dataTransfer.getData("solitaire/foundation-card");
-        const tableauMove = e.dataTransfer.getData("solitaire/tableau-card");
+        const event = dragAndDrop.drop();
+        const actions = {
+            'solitaire/stock-card': (data) => {
+                const { index: stock_active_index } = data;
+                moveCardFromStockToTableau(stock_active_index, to_tableau_pile_index);
+            },
+            'solitaire/foundation-card': (data) => {
+                const { pile: foundationPileIndex } = data;
+                moveCardFromFoundationToTableau(foundationPileIndex, to_tableau_pile_index);
+            },
+            'solitaire/tableau-card': (data) => {
+                const {
+                    pile: from_tableau_pile_index,
+                    card_position: from_pile_card_position,
+                } = data;
 
-        if (stockMove) {
-            const { index: stock_active_index } = JSON.parse(stockMove);
-            moveCardFromStockToTableau(stock_active_index, to_tableau_pile_index);
-        }
+                moveCardStackBetweenTableauPiles(
+                    from_tableau_pile_index,
+                    from_pile_card_position,
+                    to_tableau_pile_index,
+                );
+            },
+        };
 
-        if (foundationMove) {
-            const { pile: foundationPileIndex } = JSON.parse(foundationMove);
-            moveCardFromFoundationToTableau(foundationPileIndex, to_tableau_pile_index);
-        }
-
-        if (tableauMove) {
-            const {
-                pile: from_tableau_pile_index,
-                card_position: from_pile_card_position
-            } = JSON.parse(tableauMove);
-
-            moveCardStackBetweenTableauPiles(
-                from_tableau_pile_index,
-                from_pile_card_position,
-                to_tableau_pile_index
-            );
+        const drop = actions[event.content_type];
+        if (typeof drop === 'function') {
+            drop(event.payload);
         }
     }
 
@@ -63,6 +69,11 @@ const Tableau = () => {
                     onDragOver={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
+                    }}
+                    onDragEnd={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        dragAndDrop.drop();
                     }}
                 >
                     {tableau.piles[pile].map((card, card_index) =>
