@@ -7,7 +7,10 @@ import { flipStockCard } from '../../../application';
 const Stock = () => {
     const stock = useSolitaireState('stock');
 
-    const hand = stock.pile.slice(stock.active.index + 1);
+    const hand = stock.pile.slice(stock.active.index !== null
+        ? stock.active.index + 1
+        : 0
+    );
     const waste = stock.active.index !== null
         ? stock.pile.slice(0, stock.active.index + 1)
         : [];
