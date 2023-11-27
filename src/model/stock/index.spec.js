@@ -1,26 +1,19 @@
 const {
     flipStockCard,
 } = require('./index');
+const {
+    SET,
+    SUITS,
+    cardFactory,
+} = require('../../entity/cards');
 
 describe('Model/Stock', () => {
-    const heartAceCard = {
-        index: 0,
-        value: 'ACE',
-        suit: 'heart',
-    };
-    const heartTwoCard = {
-        index: 1,
-        value: '2',
-        suit: 'heart',
-    };
-    const heartTreeCard = {
-        index: 2,
-        value: '3',
-        suit: 'heart',
-    };
+    const heartAceCard = cardFactory(SET.ACE, SUITS.HEART);
+    const heartTwoCard = cardFactory(SET.TWO, SUITS.HEART);
+    const heartTreeCard = cardFactory(SET.THREE, SUITS.HEART);
 
     describe('flipStockCard()', () => {
-        test('with no active card', () => {
+        test('Active index should be 0 when there`s no previous active card', () => {
             const state = {
                 stock: {
                     active: {
@@ -36,7 +29,7 @@ describe('Model/Stock', () => {
             expect(event.payload.active_index).toBe(0);
         });
 
-        test('with previous active card', () => {
+        test('Active index should be a sequential index when there`s a previous active card', () => {
             const state = {
                 stock: {
                     active: {
@@ -52,7 +45,7 @@ describe('Model/Stock', () => {
             expect(event.payload.active_index).toBe(2);
         });
 
-        test('with last card in the pile active', () => {
+        test('Active index should be null when next index is bigger then stock pile', () => {
             const state = {
                 stock: {
                     active: {
@@ -68,7 +61,7 @@ describe('Model/Stock', () => {
             expect(event.payload.active_index).toBeNull();
         });
 
-        test('with one card in the pile', () => {
+        test('Next active index should be null with only one card in the stock pile', () => {
             const state = {
                 stock: {
                     active: {
@@ -84,7 +77,7 @@ describe('Model/Stock', () => {
             expect(event.payload.active_index).toBeNull();
         });
 
-        test('with no cards in the pile', () => {
+        test('Next active index should be always null with no cards in the stock pile', () => {
             const state = {
                 stock: {
                     active: {
@@ -96,7 +89,10 @@ describe('Model/Stock', () => {
 
             };
             const event = flipStockCard(state);
+            const event_next = flipStockCard(state);
+
             expect(event).toBeNull();
+            expect(event_next).toBeNull();
         });
     });
 });

@@ -3,36 +3,21 @@ const {
     moveCardFromStockToTableau,
     moveCardFromFoundationToTableau,
 } = require('./index');
+const {
+    SET,
+    SUITS,
+    cardFactory,
+} = require('../../entity/cards');
 
 describe('Model/Tableau', () => {
-    const heartAceCard = {
-        index: 0,
-        value: 'A',
-        suit: 'heart',
-    };
-    const heartTwoCard = {
-        index: 1,
-        value: '2',
-        suit: 'heart',
-    };
-    const spadeTwoCard = {
-        index: 1,
-        value: '2',
-        suit: 'spade',
-    };
-    const heartThreeCard = {
-        index: 2,
-        value: '3',
-        suit: 'heart',
-    };
-    const spadeKingCard = {
-        index: 0,
-        value: 'K',
-        suit: 'spade',
-    };
+    const heartAceCard = cardFactory(SET.ACE, SUITS.HEART);
+    const heartTwoCard = cardFactory(SET.TWO, SUITS.HEART);
+    const spadeTwoCard = cardFactory(SET.TWO, SUITS.SPADE);
+    const heartThreeCard = cardFactory(SET.THREE, SUITS.HEART);
+    const spadeKingCard = cardFactory(SET.KING, SUITS.SPADE);
 
     describe('moveCardStackBetweenTableauPiles()', () => {
-        test('valid move', () => {
+        test('Should return a valid event with a valid move', () => {
             const state = {
                 tableau: {
                     piles: {
@@ -55,7 +40,28 @@ describe('Model/Tableau', () => {
             expect(event.payload.card_stack.length).toBe(2);
         });
 
-        test('invalid set sequence move', () => {
+        test('Should return null if the origin and destination pile are the same', () => {
+            const state = {
+                tableau: {
+                    piles: {
+                        1: [spadeTwoCard, heartAceCard],
+                        2: [heartThreeCard],
+                        3: [],
+                        4: [],
+                    }
+                }
+            };
+            const move = {
+                fromTableauPileIndex: 1,
+                fromPileCardPosition: 1,
+                toTableauPileIndex: 1
+            };
+
+            const event = moveCardStackBetweenTableauPiles(state, move);
+            expect(event).toBeNull();
+        });
+
+        test('Should return null when the top card is an invalid set sequence', () => {
             const state = {
                 tableau: {
                     piles: {
@@ -76,7 +82,7 @@ describe('Model/Tableau', () => {
             expect(event).toBeNull();
         });
 
-        test('invalid suit sequence move', () => {
+        test('Should return null when the top card is an invalid suit sequence', () => {
             const state = {
                 tableau: {
                     piles: {
@@ -97,7 +103,7 @@ describe('Model/Tableau', () => {
             expect(event).toBeNull();
         });
 
-        test('valid empty destination pile move', () => {
+        test('Should return a valid event when moving an accepted card to an empty tableau pile destination', () => {
             const state = {
                 tableau: {
                     piles: {
@@ -119,7 +125,7 @@ describe('Model/Tableau', () => {
             expect(event.payload.card_stack.length).toBe(1);
         });
 
-        test('invalid empty destination pile move', () => {
+        test('Should return null when moving a not accepted card to an empty tableau pile destination', () => {
             const state = {
                 tableau: {
                     piles: {
@@ -142,7 +148,7 @@ describe('Model/Tableau', () => {
     });
 
     describe('moveCardFromStockToTableau()', () => {
-        test('valid move', () => {
+        test('Should return a valid event with a valid move', () => {
             const state = {
                 stock: {
                     pile: [heartAceCard]
@@ -165,7 +171,7 @@ describe('Model/Tableau', () => {
             expect(event.payload.card).toEqual(heartAceCard);
         });
 
-        test('invalid set sequence move', () => {
+        test('Should return null when the top card is an invalid set sequence', () => {
             const state = {
                 stock: {
                     pile: [heartAceCard]
@@ -186,14 +192,14 @@ describe('Model/Tableau', () => {
             expect(event).toBeNull();
         });
 
-        test('invalid suit sequence move', () => {
+        test('Should return null when the top card is an invalid suit sequence', () => {
             const state = {
                 stock: {
                     pile: [heartAceCard]
                 },
                 tableau: {
                     piles: {
-                        1: [heartAceCard],
+                        1: [],
                         2: [heartTwoCard],
                     }
                 }
@@ -207,14 +213,14 @@ describe('Model/Tableau', () => {
             expect(event).toBeNull();
         });
 
-        test('valid empty destination pile move', () => {
+        test('Should return a valid event when moving an accepted card to an empty tableau pile destination', () => {
             const state = {
                 stock: {
                     pile: [spadeKingCard]
                 },
                 tableau: {
                     piles: {
-                        1: [spadeKingCard],
+                        1: [],
                         2: [],
                     }
                 }
@@ -229,7 +235,7 @@ describe('Model/Tableau', () => {
             expect(event.payload.card).toEqual(spadeKingCard);
         });
 
-        test('invalid empty destination pile move', () => {
+        test('Should return null when moving a not accepted card to an empty tableau pile destination', () => {
             const state = {
                 stock: {
                     pile: [heartTwoCard]
@@ -252,7 +258,7 @@ describe('Model/Tableau', () => {
     });
 
     describe('moveCardFromFoundationToTableau()', () => {
-        test('valid move', () => {
+        test('Should return a valid event with a valid move', () => {
             const state = {
                 foundation: {
                     piles: {
@@ -276,7 +282,7 @@ describe('Model/Tableau', () => {
             expect(event.payload.card).toEqual(heartAceCard);
         });
 
-        test('invalid set sequence move', () => {
+        test('Should return null when the top card is an invalid set sequence', () => {
             const state = {
                 foundation: {
                     piles: {
@@ -299,7 +305,7 @@ describe('Model/Tableau', () => {
             expect(event).toBeNull();
         });
 
-        test('invalid suit sequence move', () => {
+        test('Should return null when the top card is an invalid suit sequence', () => {
             const state = {
                 foundation: {
                     piles: {
@@ -308,7 +314,7 @@ describe('Model/Tableau', () => {
                 },
                 tableau: {
                     piles: {
-                        1: [heartAceCard],
+                        1: [],
                         2: [heartTwoCard],
                     }
                 }
@@ -322,7 +328,7 @@ describe('Model/Tableau', () => {
             expect(event).toBeNull();
         });
 
-        test('valid empty destination pile move', () => {
+        test('Should return a valid event when moving an accepted card to an empty tableau pile destination', () => {
             const state = {
                 foundation: {
                     piles: {
@@ -331,7 +337,7 @@ describe('Model/Tableau', () => {
                 },
                 tableau: {
                     piles: {
-                        1: [spadeKingCard],
+                        1: [],
                         2: [],
                     }
                 }
@@ -346,7 +352,7 @@ describe('Model/Tableau', () => {
             expect(event.payload.card).toEqual(spadeKingCard);
         });
 
-        test('invalid empty destination pile move', () => {
+        test('Should return null when moving a not accepted card to an empty tableau pile destination', () => {
             const state = {
                 foundation: {
                     piles: {

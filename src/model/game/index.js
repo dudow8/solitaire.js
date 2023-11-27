@@ -3,10 +3,14 @@ const {
     shuffleCards,
 } = require('../../entity/cards');
 
+const EVENTS = {
+    GAME_INITIALIZED: 'solitaire/game-initialized',
+};
+
 const initializeGame = () => {
     const card_pack = shuffleCards(cards);
     return {
-        type: 'solitaire/game-initialized',
+        type: EVENTS.GAME_INITIALIZED,
         payload: {
             card_pack,
             stock: card_pack.slice(28),
@@ -30,5 +34,6 @@ const initializeGame = () => {
 };
 
 module.exports = {
+    EVENTS,
     initializeGame,
 };

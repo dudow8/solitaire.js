@@ -1,8 +1,12 @@
 const {
-    cards,
-    suits,
+    SET,
     isValidCardSetSequence,
 } = require('../../entity/cards');
+
+const EVENTS = {
+    CARD_MOVED_FROM_TABLEAU_TO_FOUNDATION: 'foundation/card-moved-from-tableau-to-foundation',
+    CARD_MOVED_FROM_STOCK_TO_FOUNDATION: 'foundation/card-moved-from-stock-to-foundation',
+};
 
 const isValidFoundationCardSuitSequence = (bottomCard, topCard) => {
     if (bottomCard.suit === topCard.suit)
@@ -12,7 +16,7 @@ const isValidFoundationCardSuitSequence = (bottomCard, topCard) => {
 };
 
 const isValidFoundationSequence = (bottomCard, topCard) => {
-    if (!bottomCard && topCard.value === 'A') {
+    if (!bottomCard && topCard.value === SET.ACE.value) {
         return true;
     }
 
@@ -31,7 +35,7 @@ const moveCardFromTableauToFoundation = (state, { tableauPileIndex, foundationPi
 
     if (isValidFoundationSequence(foundationTopCard, tableauCard)) {
         return {
-            type: 'foundation/card-moved-from-tableau-to-foundation',
+            type: EVENTS.CARD_MOVED_FROM_TABLEAU_TO_FOUNDATION,
             payload: {
                 tableau_pile: tableauPileIndex,
                 foundation_pile: foundationPileIndex,
@@ -51,7 +55,7 @@ const moveCardFromStockToFoundation = (state, { stockIndex, foundationPileIndex 
 
     if (isValidFoundationSequence(foundationTopCard, stockCard)) {
         return {
-            type: 'foundation/card-moved-from-stock-to-foundation',
+            type: EVENTS.CARD_MOVED_FROM_STOCK_TO_FOUNDATION,
             payload: {
                 stock_index: stockIndex,
                 foundation_pile: foundationPileIndex,
@@ -64,6 +68,7 @@ const moveCardFromStockToFoundation = (state, { stockIndex, foundationPileIndex 
 };
 
 module.exports = {
+    EVENTS,
     moveCardFromTableauToFoundation,
     moveCardFromStockToFoundation,
 };

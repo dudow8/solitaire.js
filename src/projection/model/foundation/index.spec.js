@@ -1,16 +1,22 @@
 const FoundationProjection = require('./index');
+const {
+    Game,
+    Tableau,
+    Foundation,
+} = require('../../../model');
+const {
+    SET,
+    SUITS,
+    cardFactory,
+} = require('../../../entity/cards');
 
 describe('Projection/Foundation', () => {
-    const heartAceCard = {
-        index: 0,
-        value: 'ACE',
-        suit: 'heart',
-    };
+    const heartAceCard = cardFactory(SET.ACE, SUITS.HEART);
 
     describe('gameInitialized()', () => {
-        const gameInitialized = FoundationProjection['solitaire/game-initialized'];
+        const gameInitialized = FoundationProjection[Game.EVENTS.GAME_INITIALIZED];
 
-        test('valid event data', () => {
+        test('Should return a valid state', () => {
             const event = {
                 payload: {
                     foundation: {
@@ -32,9 +38,10 @@ describe('Projection/Foundation', () => {
     });
 
     describe('cardMovedFromTableauToFoundation()', () => {
-        const cardMovedFromTableauToFoundation = FoundationProjection['foundation/card-moved-from-tableau-to-foundation'];
+        const cardMovedFromTableauToFoundation =
+            FoundationProjection[Foundation.EVENTS.CARD_MOVED_FROM_TABLEAU_TO_FOUNDATION];
 
-        test('valid event data', () => {
+        test('Should return a valid state', () => {
             const state = {
                 piles: {
                     1: [],
@@ -60,9 +67,10 @@ describe('Projection/Foundation', () => {
     });
 
     describe('cardMovedFromStockToFoundation()', () => {
-        const cardMovedFromStockToFoundation = FoundationProjection['foundation/card-moved-from-stock-to-foundation'];
+        const cardMovedFromStockToFoundation =
+            FoundationProjection[Foundation.EVENTS.CARD_MOVED_FROM_STOCK_TO_FOUNDATION];
 
-        test('valid event data', () => {
+        test('Should return a valid state', () => {
             const state = {
                 piles: {
                     1: [],
@@ -87,10 +95,11 @@ describe('Projection/Foundation', () => {
         });
     });
 
-    describe('cardMovedFromFoundationToTableau', () => {
-        const cardMovedFromFoundationToTableau = FoundationProjection['tableau/card-moved-from-foundation-to-tableau'];
+    describe('cardMovedFromFoundationToTableau()', () => {
+        const cardMovedFromFoundationToTableau =
+            FoundationProjection[Tableau.EVENTS.CARD_MOVED_FROM_FOUNDATION_TO_TABLEAU];
 
-        test('valid event data', () => {
+        test('Should return a valid state', () => {
             const state = {
                 piles: {
                     1: [heartAceCard],

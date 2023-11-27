@@ -1,27 +1,25 @@
 const StockProjection = require('./index');
-const { Game } = require('../../../model');
+const {
+    Game,
+    Stock,
+    Tableau,
+    Foundation,
+} = require('../../../model');
+const {
+    SET,
+    SUITS,
+    cardFactory,
+} = require('../../../entity/cards');
 
 describe('Projection/Stock', () => {
-    const heartAceCard = {
-        index: 0,
-        value: 'ACE',
-        suit: 'heart',
-    };
-    const heartTwoCard = {
-        index: 1,
-        value: '2',
-        suit: 'heart',
-    };
-    const spadeTwoCard = {
-        index: 1,
-        value: '2',
-        suit: 'spade',
-    };
+    const heartAceCard = cardFactory(SET.ACE, SUITS.HEART);
+    const heartTwoCard = cardFactory(SET.TWO, SUITS.HEART);
+    const spadeTwoCard = cardFactory(SET.TWO, SUITS.SPADE);
 
     describe('gameInitialized()', () => {
-        const gameInitialized = StockProjection['solitaire/game-initialized'];
+        const gameInitialized = StockProjection[Game.EVENTS.GAME_INITIALIZED];
 
-        test('valid event data', () => {
+        test('Should return a valid state', () => {
             const event = Game.initializeGame();
             const snapshot = gameInitialized({}, event);
 
@@ -34,7 +32,7 @@ describe('Projection/Stock', () => {
     describe('stockCardFlipped()', () => {
         const stockCardFlipped = StockProjection['stock/stock-card-flipped'];
 
-        test('valid event data', () => {
+        test('Should return a valid state', () => {
             const state = {
                 active: {
                     index: null,
@@ -56,9 +54,10 @@ describe('Projection/Stock', () => {
     });
 
     describe('cardMovedFromStockToTableau()', () => {
-        const cardMovedFromStockToTableau = StockProjection['tableau/card-moved-from-stock-to-tableau'];
+        const cardMovedFromStockToTableau =
+            StockProjection[Tableau.EVENTS.CARD_MOVED_FROM_STOCK_TO_TABLEAU];
 
-        test('valid event with remaining itens on the stock pile', () => {
+        test('Should return a state removing current active card and seting active card as active.index - 1', () => {
             const state = {
                 active: {
                     index: 1,
@@ -80,7 +79,7 @@ describe('Projection/Stock', () => {
             expect(snapshot.pile).toEqual([heartAceCard, spadeTwoCard]);
         });
 
-        test('valid event with no active card but cards available on the stock pile', () => {
+        test('Should return a state with active[index, card] = null, because active.index - 1 < 0', () => {
             const state = {
                 active: {
                     index: 0,
@@ -102,7 +101,7 @@ describe('Projection/Stock', () => {
             expect(snapshot.pile).toEqual([heartTwoCard, spadeTwoCard]);
         });
 
-        test('valid event with no remaining card on the stock pile', () => {
+        test('Should return a state removing current active card, stock pile = [] and active[index, card] = null', () => {
             const state = {
                 active: {
                     index: 0,
@@ -126,9 +125,10 @@ describe('Projection/Stock', () => {
     });
 
     describe('cardMovedFromStockToFoundation()', () => {
-        const cardMovedFromStockToFoundation = StockProjection['foundation/card-moved-from-stock-to-foundation'];
+        const cardMovedFromStockToFoundation =
+            StockProjection[Foundation.EVENTS.CARD_MOVED_FROM_STOCK_TO_FOUNDATION];
 
-        test('valid event with remaining itens on the stock pile', () => {
+        test('Should return a state removing current active card and seting active card as active.index - 1', () => {
             const state = {
                 active: {
                     index: 1,
@@ -150,7 +150,7 @@ describe('Projection/Stock', () => {
             expect(snapshot.pile).toEqual([heartAceCard, spadeTwoCard]);
         });
 
-        test('valid event with no active card but cards available on the stock pile', () => {
+        test('Should return a state with active[index, card] = null, because active.index - 1 < 0', () => {
             const state = {
                 active: {
                     index: 0,
@@ -172,7 +172,7 @@ describe('Projection/Stock', () => {
             expect(snapshot.pile).toEqual([heartTwoCard, spadeTwoCard]);
         });
 
-        test('valid event with no remaining card on the stock pile', () => {
+        test('Should return a state removing current active card, stock pile = [] and active[index, card] = null', () => {
             const state = {
                 active: {
                     index: 0,

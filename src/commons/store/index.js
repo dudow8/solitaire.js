@@ -10,7 +10,7 @@ const getEventStore = () => {
 
 const dropEventStore = () => {
     eventStore.length = 0;
-}
+};
 
 const computeState = (state = {}, events, reduces) => {
     const stateObjectKeys = Object.keys(reduces);

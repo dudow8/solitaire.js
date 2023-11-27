@@ -1,3 +1,7 @@
+const EVENTS = {
+    STOCK_CARD_FLIPPED: 'stock/stock-card-flipped',
+};
+
 const selectNextIndex = (pile, active_index) => {
     if (active_index === null)
         return 0;
@@ -23,17 +27,18 @@ const flipStockCard = (state) => {
         const active_card = selectNextActiveCard(stock.pile, active_index);
 
         return {
-            type: 'stock/stock-card-flipped',
+            type: EVENTS.STOCK_CARD_FLIPPED,
             payload: {
                 active_index,
                 active_card,
             }
-        }
+        };
     }
 
     return null;
 };
 
 module.exports = {
-    flipStockCard
+    EVENTS,
+    flipStockCard,
 };

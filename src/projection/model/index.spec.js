@@ -8,7 +8,6 @@ describe('Projection', () => {
         const callback = jest.fn();
 
         subscribe(callback);
-
         dispatch({
             type: 'test',
             payload: {},
@@ -17,11 +16,16 @@ describe('Projection', () => {
         expect(callback).toBeCalled();
     });
 
-    test('shouldn\'t invoke the callback after being unscribed', () => {
+    test('should return null if the subscribe callback param is not a function', () => {
+        const unsubscribe = subscribe({});
+        expect(unsubscribe).toBeNull();
+    });
+
+    test('shouldn\'t invoke the callback after being unsubscribe', () => {
         const callback = jest.fn();
 
-        const unscribe = subscribe(callback);
-        unscribe();
+        const unsubscribe = subscribe(callback);
+        unsubscribe();
         dispatch({
             type: 'test',
             payload: {},

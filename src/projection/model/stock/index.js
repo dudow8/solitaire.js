@@ -1,3 +1,10 @@
+const {
+    Game,
+    Stock,
+    Tableau,
+    Foundation,
+} = require('../../../model');
+
 const selectNextIndex = (pile, active_index) => {
     if (pile.length < 1) {
         return null;
@@ -76,8 +83,8 @@ const cardMovedFromStockToFoundation = (state, { payload }) => {
 };
 
 module.exports = {
-    'solitaire/game-initialized': gameInitialized,
-    'stock/stock-card-flipped': stockCardFlipped,
-    'tableau/card-moved-from-stock-to-tableau': cardMovedFromStockToTableau,
-    'foundation/card-moved-from-stock-to-foundation': cardMovedFromStockToFoundation,
+    [Game.EVENTS.GAME_INITIALIZED]: gameInitialized,
+    [Stock.EVENTS.STOCK_CARD_FLIPPED]: stockCardFlipped,
+    [Tableau.EVENTS.CARD_MOVED_FROM_STOCK_TO_TABLEAU]: cardMovedFromStockToTableau,
+    [Foundation.EVENTS.CARD_MOVED_FROM_STOCK_TO_FOUNDATION]: cardMovedFromStockToFoundation,
 };

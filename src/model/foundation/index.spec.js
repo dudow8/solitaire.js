@@ -2,36 +2,20 @@ const {
     moveCardFromTableauToFoundation,
     moveCardFromStockToFoundation,
 } = require('./index');
+const {
+    SET,
+    SUITS,
+    cardFactory,
+} = require('../../entity/cards');
 
 describe('Model/Foundation', () => {
-    const heartAceCard = {
-        index: 0,
-        value: 'A',
-        suit: 'heart',
-    };
-    const heartTwoCard = {
-        index: 1,
-        value: '2',
-        suit: 'heart',
-    };
-    const heartTreeCard = {
-        index: 2,
-        value: '3',
-        suit: 'heart',
-    };
-    const spadeTwoCard = {
-        index: 1,
-        value: '2',
-        suit: 'spade',
-    };
-    const spadeKingCard = {
-        index: 0,
-        value: 'KING',
-        suit: 'spade',
-    };
+    const heartAceCard = cardFactory(SET.ACE, SUITS.HEART);
+    const heartTwoCard = cardFactory(SET.TWO, SUITS.HEART);
+    const heartTreeCard = cardFactory(SET.THREE, SUITS.HEART);
+    const spadeTwoCard = cardFactory(SET.TWO, SUITS.SPADE);
 
     describe('moveCardFromTableauToFoundation()', () => {
-        test('valid move', () => {
+        test('Should return a valid event with a valid move', () => {
             const state = {
                 foundation: {
                     piles: {
@@ -54,7 +38,7 @@ describe('Model/Foundation', () => {
             expect(event.payload.card).toEqual(heartTwoCard);
         });
 
-        test('invalid set sequence move', () => {
+        test('Should return null when the top card is an invalid set sequence', () => {
             const state = {
                 foundation: {
                     piles: {
@@ -76,7 +60,7 @@ describe('Model/Foundation', () => {
             expect(event).toBeNull();
         });
 
-        test('invalid suit sequence move', () => {
+        test('Should return null when the top card is an invalid suit sequence', () => {
             const state = {
                 foundation: {
                     piles: {
@@ -98,7 +82,7 @@ describe('Model/Foundation', () => {
             expect(event).toBeNull();
         });
 
-        test('valid empty destination foundation move', () => {
+        test('Should return a valid event when moving an accepted card to an empty foundation pile destination', () => {
             const state = {
                 foundation: {
                     piles: {
@@ -121,7 +105,7 @@ describe('Model/Foundation', () => {
             expect(event.payload.card).toEqual(heartAceCard);
         });
 
-        test('invalid empty destination foundation move', () => {
+        test('Should return null when moving a not accepted card to an empty foundation pile destination', () => {
             const state = {
                 foundation: {
                     piles: {
@@ -145,7 +129,7 @@ describe('Model/Foundation', () => {
     });
 
     describe('moveCardFromStockToFoundation()', () => {
-        test('valid move', () => {
+        test('Should return a valid event with a valid move', () => {
             const state = {
                 foundation: {
                     piles: {
@@ -166,7 +150,7 @@ describe('Model/Foundation', () => {
             expect(event.payload.card).toEqual(heartAceCard);
         });
 
-        test('invalid set sequence move', () => {
+        test('Should return null when the top card is an invalid set sequence', () => {
             const state = {
                 foundation: {
                     piles: {
@@ -186,7 +170,7 @@ describe('Model/Foundation', () => {
             expect(event).toBeNull();
         });
 
-        test('invalid suit sequence move', () => {
+        test('Should return null when the top card is an invalid suit sequence', () => {
             const state = {
                 foundation: {
                     piles: {
@@ -206,7 +190,7 @@ describe('Model/Foundation', () => {
             expect(event).toBeNull();
         });
 
-        test('valid empty destination foundation move', () => {
+        test('Should return a valid event when moving an accepted card to an empty foundation pile destination', () => {
             const state = {
                 foundation: {
                     piles: {
@@ -227,7 +211,7 @@ describe('Model/Foundation', () => {
             expect(event.payload.card).toEqual(heartAceCard);
         });
 
-        test('invalid empty destination foundation move', () => {
+        test('Should return null when moving a not accepted card to an empty foundation pile destination', () => {
             const state = {
                 foundation: {
                     piles: {

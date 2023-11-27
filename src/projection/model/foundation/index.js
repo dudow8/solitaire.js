@@ -1,3 +1,9 @@
+const {
+    Game,
+    Tableau,
+    Foundation,
+} = require('../../../model');
+
 const gameInitialized = (state, { payload }) => {
     const { foundation: piles } = payload;
     return {
@@ -33,8 +39,8 @@ const cardMovedFromFoundationToTableau = (state, { payload }) => {
 };
 
 module.exports = {
-    'solitaire/game-initialized': gameInitialized,
-    'foundation/card-moved-from-tableau-to-foundation': cardMovedFromTableauToFoundation,
-    'foundation/card-moved-from-stock-to-foundation': cardMovedFromStockToFoundation,
-    'tableau/card-moved-from-foundation-to-tableau': cardMovedFromFoundationToTableau,
+    [Game.EVENTS.GAME_INITIALIZED]: gameInitialized,
+    [Foundation.EVENTS.CARD_MOVED_FROM_TABLEAU_TO_FOUNDATION]: cardMovedFromTableauToFoundation,
+    [Foundation.EVENTS.CARD_MOVED_FROM_STOCK_TO_FOUNDATION]: cardMovedFromStockToFoundation,
+    [Tableau.EVENTS.CARD_MOVED_FROM_FOUNDATION_TO_TABLEAU]: cardMovedFromFoundationToTableau,
 };
