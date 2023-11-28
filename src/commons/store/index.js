@@ -1,6 +1,6 @@
 const eventStore = [];
 
-const dispatch = (event) => {
+const append = (event) => {
     eventStore.push(event);
 };
 
@@ -12,7 +12,11 @@ const dropEventStore = () => {
     eventStore.length = 0;
 };
 
-const computeState = (state = {}, events, reduces) => {
+const computeState = (state, events, reduces) => {
+    if (state === null || typeof state !== 'object') {
+        return null;
+    }
+
     const stateObjectKeys = Object.keys(reduces);
     return events.reduce((state, event) => {
         return stateObjectKeys.reduce((snapshot, stateKey) => {
@@ -31,7 +35,7 @@ const computeState = (state = {}, events, reduces) => {
 };
 
 module.exports = {
-    dispatch,
+    append,
     getEventStore,
     computeState,
     dropEventStore,

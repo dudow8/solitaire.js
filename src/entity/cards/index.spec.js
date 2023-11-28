@@ -27,6 +27,14 @@ describe('Entity/Cards', () => {
             expect(cards.length).toBe(52);
             expect(cards.slice(0, 3)).toEqual(sequence);
         });
+
+        test('card property flipped should be default false', () => {
+            const flippedCard = cardFactory(SET.ACE, SUITS.HEART, true);
+            const defaultNotFlippedPropertyCard = cardFactory(SET.ACE, SUITS.HEART);
+            
+            expect(flippedCard.flipped).toBe(true);
+            expect(defaultNotFlippedPropertyCard.flipped).toBe(false);
+        });
     });
 
     describe('shuffleCards()', () => {

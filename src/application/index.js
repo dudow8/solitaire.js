@@ -1,5 +1,5 @@
 const {
-    dispatch,
+    append,
     getSnapshot,
     dropEventStore,
 } = require('../projection/model');
@@ -14,13 +14,13 @@ const {
 const newGame = () => {
     dropEventStore();
     const event = Game.initializeGame();
-    dispatch(event);
+    append(event);
 };
 
 const flipStockCard = () => {
     const snapshot = getSnapshot();
     const event = Stock.flipStockCard(snapshot);
-    dispatch(event);
+    append(event);
 }
 
 const moveCardFromStockToFoundation = (stockIndex, foundationPileIndex) => {
@@ -30,7 +30,7 @@ const moveCardFromStockToFoundation = (stockIndex, foundationPileIndex) => {
         foundationPileIndex,
     };
     const event = Foundation.moveCardFromStockToFoundation(snapshot, payload);
-    dispatch(event);
+    append(event);
 }
 
 const moveCardFromTableauToFoundation = (tableauPileIndex, foundationPileIndex) => {
@@ -40,7 +40,7 @@ const moveCardFromTableauToFoundation = (tableauPileIndex, foundationPileIndex) 
         foundationPileIndex,
     };
     const event = Foundation.moveCardFromTableauToFoundation(snapshot, payload);
-    dispatch(event);
+    append(event);
 }
 
 const moveCardStackBetweenTableauPiles = (fromTableauPileIndex, fromPileCardPosition, toTableauPileIndex) => {
@@ -51,7 +51,7 @@ const moveCardStackBetweenTableauPiles = (fromTableauPileIndex, fromPileCardPosi
         toTableauPileIndex,
     };
     const event = Tableau.moveCardStackBetweenTableauPiles(snapshot, payload);
-    dispatch(event);
+    append(event);
 }
 
 const moveCardFromStockToTableau = (stockIndex, tableauPileIndex) => {
@@ -61,7 +61,7 @@ const moveCardFromStockToTableau = (stockIndex, tableauPileIndex) => {
         tableauPileIndex,
     };
     const event = Tableau.moveCardFromStockToTableau(snapshot, payload);
-    dispatch(event);
+    append(event);
 }
 
 const moveCardFromFoundationToTableau = (foundationPileIndex, tableauPileIndex) => {
@@ -71,7 +71,7 @@ const moveCardFromFoundationToTableau = (foundationPileIndex, tableauPileIndex) 
         tableauPileIndex,
     };
     const event = Tableau.moveCardFromFoundationToTableau(snapshot, payload);
-    dispatch(event);
+    append(event);
 }
 
 module.exports = {
