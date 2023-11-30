@@ -16,6 +16,7 @@ describe('Model/Prediction', () => {
     const heartAceCard = cardFactory(SET.ACE, SUITS.HEART);
     const heartTwoCard = cardFactory(SET.TWO, SUITS.HEART);
     const spadeTwoCard = cardFactory(SET.TWO, SUITS.SPADE);
+    const spadeTwoCardFlipped = cardFactory(SET.TWO, SUITS.SPADE, true);
     const heartTreeCard = cardFactory(SET.THREE, SUITS.HEART);
     const heartKingCard = cardFactory(SET.KING, SUITS.HEART);
     const heartKingCardFlipped = cardFactory(SET.KING, SUITS.HEART, true);
@@ -200,8 +201,8 @@ describe('Model/Prediction', () => {
                 }
             };
             const payload = {
-                from_tableau_pile_index: 3,
-                from_pile_card_position: 2,
+                fromTableauPileIndex: 3,
+                fromPileCardPosition: 2,
             };
 
             const event = predictTableauMove(state, payload);
@@ -236,8 +237,8 @@ describe('Model/Prediction', () => {
                 }
             };
             const payload = {
-                from_tableau_pile_index: 5,
-                from_pile_card_position: 0,
+                fromTableauPileIndex: 5,
+                fromPileCardPosition: 0,
             };
 
             const event = predictTableauMove(state, payload);
@@ -247,6 +248,120 @@ describe('Model/Prediction', () => {
             expect(
                 parseInt(event.payload.foundation_pile)
             ).toBe(1);
+        });
+
+        test('should match a move to tableau.piles[4]', () => {
+            const state = {
+                foundation: {
+                    piles: { 1: [], 2: [], 3: [], 4: [] }
+                },
+                tableau: {
+                    piles: {
+                        1: [spadeTwoCard, heartAceCard],
+                        2: [],
+                        3: [],
+                        4: [heartTreeCard],
+                        5: [],
+                        6: [],
+                        7: [],
+                    },
+                }
+            };
+            const payload = {
+                fromTableauPileIndex: 1,
+                fromPileCardPosition: 0,
+            };
+
+            const event = predictTableauMove(state, payload);
+            expect(event).not.toBeNull();
+            expect(event.type).toBe(Tableau.EVENTS.CARD_STACK_MOVED_BETWEEN_TABLEAU_PILES);
+            expect(event.payload.card_stack).toEqual([spadeTwoCard, heartAceCard]);
+            expect(
+                parseInt(event.payload.to_pile)
+            ).toBe(4);
+        });
+
+        test('should match a move to tableau.piles[3] when moving a king to an empty pile', () => {
+            const state = {
+                foundation: {
+                    piles: { 1: [], 2: [], 3: [], 4: [] }
+                },
+                tableau: {
+                    piles: {
+                        1: [spadeTwoCardFlipped, heartKingCard],
+                        2: [heartTreeCard],
+                        3: [],
+                        4: [],
+                        5: [],
+                        6: [],
+                        7: [],
+                    },
+                }
+            };
+            const payload = {
+                fromTableauPileIndex: 1,
+                fromPileCardPosition: 1,
+            };
+
+            const event = predictTableauMove(state, payload);
+            expect(event).not.toBeNull();
+            expect(event.type).toBe(Tableau.EVENTS.CARD_STACK_MOVED_BETWEEN_TABLEAU_PILES);
+            expect(event.payload.card_stack).toEqual([heartKingCard]);
+            expect(
+                parseInt(event.payload.to_pile)
+            ).toBe(3);
+        });
+
+        test('should not match a move if the top card is flipped', () => {
+            const state = {
+                foundation: {
+                    piles: { 1: [heartAceCard], 2: [], 3: [], 4: [] }
+                },
+                tableau: {
+                    piles: {
+                        1: [],
+                        2: [heartKingCardFlipped, spadeTwoCard],
+                        3: [],
+                        4: [heartTreeCard],
+                        5: [],
+                        6: [],
+                        7: [],
+                    },
+                }
+            };
+            const payload = {
+                fromTableauPileIndex: 2,
+                fromPileCardPosition: 0,
+            };
+
+            const event = predictTableauMove(state, payload);
+            expect(event).toBeNull();
+        });
+
+        test('should not match a move', () => {
+            const state = {
+                foundation: {
+                    piles: { 1: [heartAceCard], 2: [], 3: [], 4: [] }
+                },
+                tableau: {
+                    piles: {
+                        1: [],
+                        2: [heartKingCardFlipped, heartTreeCard],
+                        3: [],
+                        4: [spadeTwoCard],
+                        5: [],
+                        6: [],
+                        7: [],
+                    },
+                }
+            };
+            const payload = {
+                fromTableauPileIndex: 2,
+                fromPileCardPosition: 1,
+            };
+
+            const event = predictTableauMove(state, payload);
+            expect(event).toBeNull();
         });
     });
 });

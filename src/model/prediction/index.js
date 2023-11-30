@@ -53,10 +53,10 @@ const predictStockMove = (state) => {
     return event;
 };
 
-const predictTableauMoveToFoundation = (state, { from_tableau_pile_index, from_pile_card_position }) => {
-    const from_pile = state.tableau.piles[from_tableau_pile_index];
+const predictTableauMoveToFoundation = (state, { fromTableauPileIndex, fromPileCardPosition }) => {
+    const fromPile = state.tableau.piles[fromTableauPileIndex];
 
-    if (from_pile_card_position === from_pile.length - 1) {
+    if (fromPileCardPosition === fromPile.length - 1) {
         const piles = Object.keys(state.foundation.piles);
 
         const event = piles.reduce((event, foundationPileIndex) => {
@@ -64,7 +64,7 @@ const predictTableauMoveToFoundation = (state, { from_tableau_pile_index, from_p
                 return event;
             }
             const payload = {
-                tableauPileIndex: from_tableau_pile_index,
+                tableauPileIndex: fromTableauPileIndex,
                 foundationPileIndex
             };
             return Foundation.moveCardFromTableauToFoundation(state, payload);
@@ -76,13 +76,40 @@ const predictTableauMoveToFoundation = (state, { from_tableau_pile_index, from_p
     return null;
 };
 
-const predictTableauMove = (state, { from_tableau_pile_index, from_pile_card_position }) => {
+const predictTableauMoveBetweenPiles = (state, { fromTableauPileIndex, fromPileCardPosition }) => {
+    const tableauPiles = state.tableau.piles;
+    const topMovingCard = tableauPiles[fromTableauPileIndex][fromPileCardPosition];
+
+    if (!topMovingCard.flipped) {
+        const piles = Object.keys(tableauPiles);
+
+        const event = piles.reduce((event, pile_index) => {
+            if (event !== null) {
+                return event;
+            }
+
+            const payload = {
+                fromTableauPileIndex,
+                fromPileCardPosition,
+                toTableauPileIndex: pile_index,
+            };
+            return Tableau.moveCardStackBetweenTableauPiles(state, payload);
+        }, null);
+
+        return event;
+    }
+
+    return null;
+};
+
+const predictTableauMove = (state, { fromTableauPileIndex, fromPileCardPosition }) => {
     const steps = [
         predictTableauMoveToFoundation,
+        predictTableauMoveBetweenPiles,
     ];
     const payload = {
-        from_tableau_pile_index,
-        from_pile_card_position,
+        fromTableauPileIndex,
+        fromPileCardPosition,
     };
 
     const event = predict(state, steps, payload);

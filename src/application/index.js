@@ -52,11 +52,11 @@ const predictStockMove = () => {
     }).error;
 };
 
-const predictTableauMove = (from_tableau_pile_index, from_pile_card_position) => {
+const predictTableauMove = (fromTableauPileIndex, fromPileCardPosition) => {
     const snapshot = getSnapshot();
     const payload = {
-        from_tableau_pile_index,
-        from_pile_card_position,
+        fromTableauPileIndex,
+        fromPileCardPosition,
     };
     const event = Prediction.predictTableauMove(snapshot, payload);
 
