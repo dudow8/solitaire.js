@@ -4,13 +4,11 @@ const pubsub = require('../pubsub');
 const projectionFactory = (PUBSUB_TOPIC, hooks) => {
     let snapshot = {};
 
-    const append = (event) => {
-        if (event) {
-            store.append(event);
-            cacheSnapshot(event);
-            pubsub.notify(PUBSUB_TOPIC);
-        }
+    const onStoreAppendEvent = (event) => {
+        cacheSnapshot(event);
+        pubsub.notify(PUBSUB_TOPIC);
     };
+    store.subscribe(onStoreAppendEvent);
 
     const subscribe = (callback) => {
         const unsubscribe = pubsub.subscribe(PUBSUB_TOPIC, callback);
@@ -35,7 +33,6 @@ const projectionFactory = (PUBSUB_TOPIC, hooks) => {
     };
 
     return {
-        append,
         subscribe,
         getSnapshot,
         dropEventStore,

@@ -1,5 +1,5 @@
+const { append } = require('../commons/store');
 const {
-    append,
     getSnapshot,
     dropEventStore,
 } = require('../projection/model');

@@ -5,7 +5,7 @@ import { newGame } from '../../../application/index';
 import Tableau from '../tableau';
 import Foundation from '../foundation';
 import Stock from '../stock';
-import { DragAndDropProvider } from '../../hooks';
+import { DragAndDropProvider, useGameplayState } from '../../hooks';
 
 const GlobalStyle = createGlobalStyle`
     html, body {
@@ -45,8 +45,13 @@ const GameLayoutHead = styled.div`
 newGame();
 
 const Solitaire = () => {
+    const gameplay = useGameplayState('score');
     return (
         <DragAndDropProvider>
+            <div>
+            score: {gameplay.score} <br />
+            moves: {gameplay.moves}
+            </div>
             <GameLayout>
                 <GlobalStyle />
                 <GameLayoutHead>

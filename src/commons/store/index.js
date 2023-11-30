@@ -1,7 +1,11 @@
+const pubsub = require('../pubsub');
+
+const PUBSUB_TOPIC = 'event-store';
 const eventStore = [];
 
 const append = (event) => {
     eventStore.push(event);
+    pubsub.notify(PUBSUB_TOPIC, event);
 };
 
 const getEventStore = () => {
@@ -34,8 +38,14 @@ const computeState = (state, events, reduces) => {
     }, state);
 };
 
+const subscribe = (callback) => {
+    const unsubscribe = pubsub.subscribe(PUBSUB_TOPIC, callback);
+    return unsubscribe;
+};
+
 module.exports = {
     append,
+    subscribe,
     getEventStore,
     computeState,
     dropEventStore,

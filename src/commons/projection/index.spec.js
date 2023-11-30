@@ -15,7 +15,7 @@ describe('Commons/Projection', () => {
         const callback = jest.fn();
 
         subscribe(callback);
-        append({
+        store.append({
             type: 'test',
             payload: {},
         });
@@ -33,7 +33,7 @@ describe('Commons/Projection', () => {
 
         const unsubscribe = subscribe(callback);
         unsubscribe();
-        append({
+        store.append({
             type: 'test',
             payload: {},
         });
@@ -45,7 +45,7 @@ describe('Commons/Projection', () => {
     test('dropEventStore should erease a previus snapshot', () => {
         const dropEventStoreMock = jest.spyOn(store, 'dropEventStore');
         const event = initializeGame();
-        append(event);
+        store.append(event);
 
         const cachedSnapshotBeforeDrop = getSnapshot();
         dropEventStore();
