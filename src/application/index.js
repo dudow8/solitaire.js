@@ -16,6 +16,14 @@ const response = (payload = {}) => ({
     error: { status: 'error', payload },
 });
 
+const checkGameComplete = () => {
+    const snapshot = getSnapshot();
+    const event = Game.completeGame(snapshot);
+    if (event) {
+        append(event);
+    }
+};
+
 const newGame = () => {
     dropEventStore();
     const event = Game.initializeGame();
@@ -48,6 +56,7 @@ const moveCardFromStockToFoundation = (stockIndex, foundationPileIndex) => {
 
     if (event) {
         append(event);
+        checkGameComplete();
         return response().success;
     }
     return response().error;
@@ -63,6 +72,7 @@ const moveCardFromTableauToFoundation = (tableauPileIndex, foundationPileIndex) 
 
     if (event) {
         append(event);
+        checkGameComplete();
         return response().success;
     }
     return response().error;

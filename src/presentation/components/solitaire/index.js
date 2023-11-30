@@ -42,18 +42,27 @@ const GameLayoutHead = styled.div`
     margin-bottom: 10px;
 `;
 
+const Score = styled.div`
+    color: white;
+    font-size: 30px;
+    margin: 10px 100px 50px;
+    display: flex;
+    justify-content: space-between;
+`;
+
 newGame();
 
 const Solitaire = () => {
     const gameplay = useGameplayState('score');
     return (
         <DragAndDropProvider>
-            <div>
-            score: {gameplay.score} <br />
-            moves: {gameplay.moves}
-            </div>
             <GameLayout>
                 <GlobalStyle />
+                <Score>
+                    <span>score: {gameplay.score}</span>
+                    <span>moves: {gameplay.moves}</span>
+                    <span>state: {gameplay.game_state}</span>
+                </Score>
                 <GameLayoutHead>
                     <Foundation />
                     <Stock />

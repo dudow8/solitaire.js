@@ -1,6 +1,13 @@
 const {
+    STATE,
+    completeGame,
     initializeGame,
 } = require('./index');
+const {
+    SET,
+    SUITS,
+    cardFactory,
+} = require('../../entity/cards');
 
 describe('Model/Game', () => {
     describe('initializeGame()', () => {
@@ -17,6 +24,52 @@ describe('Model/Game', () => {
             expect(state.tableau['7'].length).toBe(7);
 
             expect(state.stock.length).toBe(24);
+        });
+    });
+
+    describe('completeGame()', () => {
+        test('should finish the game with all foundations complete', () => {
+            const generateFullPile = (suit) => {
+                return Object.keys(SET).map(setIDX => {
+                    cardFactory(SET[setIDX], SUITS[suit])
+                });
+            };
+
+            const state = {
+                foundation: {
+                    piles: {
+                        1: generateFullPile(SUITS.HEART),
+                        2: generateFullPile(SUITS.CLUB),
+                        3: generateFullPile(SUITS.DIAMOND),
+                        4: generateFullPile(SUITS.SPADE),
+                    }
+                }
+            };
+
+            const event = completeGame(state);
+            expect(event.payload.game_state).toBe(STATE.COMPLETED);
+        });
+
+        test('should be null case not all foundations are complete', () => {
+            const generateFullPile = (suit) => {
+                return Object.keys(SET).map(setIDX => {
+                    cardFactory(SET[setIDX], SUITS[suit])
+                });
+            };
+
+            const state = {
+                foundation: {
+                    piles: {
+                        1: generateFullPile(SUITS.HEART),
+                        2: generateFullPile(SUITS.CLUB).slice(0, -1),
+                        3: generateFullPile(SUITS.DIAMOND),
+                        4: generateFullPile(SUITS.SPADE),
+                    }
+                }
+            };
+
+            const event = completeGame(state);
+            expect(event).toBeNull();
         });
     });
 });

@@ -13,7 +13,18 @@ const constraintMinScore = (score) => {
 }
 
 const gameInitialized = (state, payload) => {
-    return { score: 0, moves: 0 };
+    return {
+        score: 0,
+        moves: 0,
+        game_state: Game.STATE.PLAYING,
+    };
+};
+
+const gameCompleted = (state, payload) => {
+    return {
+        ...state,
+        game_state: Game.STATE.COMPLETED,
+    }
 };
 
 const stockCardFlipped = (state, payload) => {
@@ -24,34 +35,35 @@ const stockCardFlipped = (state, payload) => {
 const cardMovedFromStockToFoundation = (state, payload) => {
     const score = state.score + 10;
     const moves = state.moves + 1;
-    return { score, moves };
+    return { ...state, score, moves };
 };
 
 const cardMovedFromTableauToFoundation = (state, payload) => {
     const score = state.score + 10;
     const moves = state.moves + 1;
-    return { score, moves };
+    return { ...state, score, moves };
 };
 
 const cardMovedFromFoundationToTableau = (state, payload) => {
     const score = constraintMinScore(state.score - 15);
     const moves = state.moves + 1;
-    return { score, moves };
+    return { ...state, score, moves };
 };
 
 const cardStackMovedBetweenTableauPiles = (state, payload) => {
     const score = state.score + 5;
     const moves = state.moves + 1;
-    return { score, moves };
+    return { ...state, score, moves };
 };
 
 const cardMovedFromStockToTableau = (state, payload) => {
     const score = state.score + 5;
     const moves = state.moves + 1;
-    return { score, moves };
+    return { ...state, score, moves };
 };
 
 module.exports = {
+    [Game.EVENTS.GAME_COMPLETED]: gameCompleted,
     [Game.EVENTS.GAME_INITIALIZED]: gameInitialized,
     [Stock.EVENTS.STOCK_CARD_FLIPPED]: stockCardFlipped,
     [Foundation.EVENTS.CARD_MOVED_FROM_STOCK_TO_FOUNDATION]: cardMovedFromStockToFoundation,

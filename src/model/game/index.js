@@ -3,8 +3,14 @@ const {
     shuffleCards,
 } = require('../../entity/cards');
 
+const STATE = {
+    PLAYING: 'playing',
+    COMPLETED: 'completed',
+};
+
 const EVENTS = {
     GAME_INITIALIZED: 'solitaire/game-initialized',
+    GAME_COMPLETED: 'solitaire/game-completed',
 };
 
 const initializeGame = () => {
@@ -13,6 +19,7 @@ const initializeGame = () => {
         type: EVENTS.GAME_INITIALIZED,
         payload: {
             card_pack,
+            game_state: STATE.PLAYING,
             stock: card_pack.slice(28),
             foundation: {
                 1: [],
@@ -33,7 +40,28 @@ const initializeGame = () => {
     };
 };
 
+const completeGame = (state) => {
+    const foundations = Object.keys(state.foundation.piles);
+    const completed = foundations.reduce((acumulated, idx) => {
+        const isCompleted = state.foundation.piles[idx].length === 13;
+        return acumulated && isCompleted;
+    }, true);
+
+    if (completed) {
+        return {
+            type: EVENTS.GAME_COMPLETED,
+            payload: {
+                game_state: STATE.COMPLETED,
+            },
+        }
+    };
+
+    return null;
+};
+
 module.exports = {
+    STATE,
     EVENTS,
     initializeGame,
+    completeGame,
 };
