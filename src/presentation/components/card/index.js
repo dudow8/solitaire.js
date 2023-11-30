@@ -8,7 +8,7 @@ const suitSymbol = {
     spade: '♠',
 };
 
-const Card = ({ label, suit, flipped = false, draggable = false, ondrag = null }) => (
+const Card = ({ label, suit, flipped = false, draggable = false, ondrag = null, onDoubleClick = null }) => (
     <S.Container
         $suit={suit}
         draggable={draggable}
@@ -16,7 +16,8 @@ const Card = ({ label, suit, flipped = false, draggable = false, ondrag = null }
             if (draggable && typeof ondrag === 'function') {
                 ondrag(e);
             }
-        }}>
+        }}
+        onDoubleClick={onDoubleClick}>
         {!flipped &&
             <S.Face>
                 <S.FaceHeadline>

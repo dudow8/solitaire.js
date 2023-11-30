@@ -2,7 +2,7 @@ import React from "react";
 import { styled } from "styled-components";
 import Card from "../card";
 import { useSolitaireState, useDragAndDropContext } from "../../hooks";
-import { flipStockCard } from '../../../application';
+import { flipStockCard, predictStockMove } from '../../../application';
 
 const Stock = () => {
     const stock = useSolitaireState('stock');
@@ -21,6 +21,10 @@ const Stock = () => {
         dragAndDrop.drag('solitaire/stock-card', payload);
     };
 
+    const onDoubleClick = (e) => {
+        predictStockMove();
+    };
+
     return (
         <Container>
             <Waste>
@@ -30,7 +34,9 @@ const Stock = () => {
                         label={card.value}
                         suit={card.suit}
                         draggable
-                        ondrag={(e) => { ondrag(e); }} />
+                        ondrag={(e) => { ondrag(e); }}
+                        onDoubleClick={(e) => { onDoubleClick(e); }}
+                    />
                 )}
             </Waste>
             <Hand onClick={flipStockCard}>
@@ -39,7 +45,8 @@ const Stock = () => {
                         key={key}
                         label={card.value}
                         suit={card.suit}
-                        flipped={true} />
+                        flipped={true}
+                    />
                 )}
             </Hand>
         </Container>

@@ -24,8 +24,8 @@ const GlobalStyle = createGlobalStyle`
         justify-content: center;
 
         > div {
-            /* transform: scale(65%);
-            transform-origin: top left; */
+            /* transform: scale(60%) translateX(20%); */
+            /* transform-origin: top left; */
         }
     }
 `;
@@ -61,7 +61,6 @@ const Solitaire = () => {
                 <Score>
                     <span>score: {gameplay.score}</span>
                     <span>moves: {gameplay.moves}</span>
-                    <span>state: {gameplay.game_state}</span>
                 </Score>
                 <GameLayoutHead>
                     <Foundation />

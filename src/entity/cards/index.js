@@ -39,8 +39,9 @@ const cardFactory = (card, suit, flipped = false) => ({
     flipped,
 });
 
-const shuffleCards = cards => {
-    return Array.from(cards).sort(() => Math.random() - 0.5);
+const shuffleCards = (cards) => {
+    const seed = () => Math.random() - 0.5;
+    return Array.from(cards).sort(seed);
 }
 
 const isValidCardSetSequence = (cardA, cardB) => {

@@ -46,6 +46,19 @@ const flipStockCard = () => {
     return response().error;
 }
 
+const predictStockMove = () => {
+    const snapshot = getSnapshot();
+    const event = Stock.predictMove(snapshot);
+
+    if (event) {
+        append(event);
+        return response().success;
+    }
+    return response({
+        message: 'no possible movement was predicted',
+    }).error;
+};
+
 const moveCardFromStockToFoundation = (stockIndex, foundationPileIndex) => {
     const snapshot = getSnapshot();
     const payload = {
@@ -127,6 +140,7 @@ const moveCardFromFoundationToTableau = (foundationPileIndex, tableauPileIndex) 
 module.exports = {
     newGame,
     flipStockCard,
+    predictStockMove,
     moveCardFromStockToFoundation,
     moveCardFromTableauToFoundation,
     moveCardStackBetweenTableauPiles,
