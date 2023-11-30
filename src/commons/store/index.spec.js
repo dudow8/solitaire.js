@@ -94,4 +94,14 @@ describe('Commons/Store', () => {
             expect(eventStoreBeforeDrop.length).toBe(2);
         });
     })
+
+    describe('append()', () => {
+        test('should throw an exception if event is null', () => {
+            const event = null;
+
+            expect(() => {
+                append(event);
+            }).toThrowError();
+        });
+    })
 });

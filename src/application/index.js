@@ -11,16 +11,31 @@ const {
     Tableau,
 } = require('../model/index');
 
+const response = (payload = {}) => ({
+    success: { status: 'success', payload },
+    error: { status: 'error', payload },
+});
+
 const newGame = () => {
     dropEventStore();
     const event = Game.initializeGame();
-    append(event);
+
+    if (event) {
+        append(event);
+        return response().success;
+    }
+    return response().error;
 };
 
 const flipStockCard = () => {
     const snapshot = getSnapshot();
     const event = Stock.flipStockCard(snapshot);
-    append(event);
+
+    if (event) {
+        append(event);
+        return response().success;
+    }
+    return response().error;
 }
 
 const moveCardFromStockToFoundation = (stockIndex, foundationPileIndex) => {
@@ -30,7 +45,12 @@ const moveCardFromStockToFoundation = (stockIndex, foundationPileIndex) => {
         foundationPileIndex,
     };
     const event = Foundation.moveCardFromStockToFoundation(snapshot, payload);
-    append(event);
+
+    if (event) {
+        append(event);
+        return response().success;
+    }
+    return response().error;
 }
 
 const moveCardFromTableauToFoundation = (tableauPileIndex, foundationPileIndex) => {
@@ -40,7 +60,12 @@ const moveCardFromTableauToFoundation = (tableauPileIndex, foundationPileIndex) 
         foundationPileIndex,
     };
     const event = Foundation.moveCardFromTableauToFoundation(snapshot, payload);
-    append(event);
+
+    if (event) {
+        append(event);
+        return response().success;
+    }
+    return response().error;
 }
 
 const moveCardStackBetweenTableauPiles = (fromTableauPileIndex, fromPileCardPosition, toTableauPileIndex) => {
@@ -51,7 +76,12 @@ const moveCardStackBetweenTableauPiles = (fromTableauPileIndex, fromPileCardPosi
         toTableauPileIndex,
     };
     const event = Tableau.moveCardStackBetweenTableauPiles(snapshot, payload);
-    append(event);
+
+    if (event) {
+        append(event);
+        return response().success;
+    }
+    return response().error;
 }
 
 const moveCardFromStockToTableau = (stockIndex, tableauPileIndex) => {
@@ -61,7 +91,12 @@ const moveCardFromStockToTableau = (stockIndex, tableauPileIndex) => {
         tableauPileIndex,
     };
     const event = Tableau.moveCardFromStockToTableau(snapshot, payload);
-    append(event);
+
+    if (event) {
+        append(event);
+        return response().success;
+    }
+    return response().error;
 }
 
 const moveCardFromFoundationToTableau = (foundationPileIndex, tableauPileIndex) => {
@@ -71,7 +106,12 @@ const moveCardFromFoundationToTableau = (foundationPileIndex, tableauPileIndex) 
         tableauPileIndex,
     };
     const event = Tableau.moveCardFromFoundationToTableau(snapshot, payload);
-    append(event);
+
+    if (event) {
+        append(event);
+        return response().success;
+    }
+    return response().error;
 }
 
 module.exports = {

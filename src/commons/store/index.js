@@ -4,6 +4,9 @@ const PUBSUB_TOPIC = 'event-store';
 const eventStore = [];
 
 const append = (event) => {
+    if (event === null)
+        throw 'error trying to append a null event to the store';
+
     eventStore.push(event);
     pubsub.notify(PUBSUB_TOPIC, event);
 };
