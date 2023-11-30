@@ -1,6 +1,3 @@
-const Foundation = require('../foundation');
-const Tableau = require('../tableau');
-
 const EVENTS = {
     STOCK_CARD_FLIPPED: 'stock/stock-card-flipped',
 };
@@ -72,6 +69,9 @@ const predictMoveToTableau = (state) => {
 };
 
 const predictMove = (state) => {
+    const steps = {
+        
+    };
     const moveToFoundationEvent = predictMoveToFoundation(state);
     if (moveToFoundationEvent) {
         return moveToFoundationEvent;
@@ -88,5 +88,4 @@ const predictMove = (state) => {
 module.exports = {
     EVENTS,
     flipStockCard,
-    predictMove,
 };

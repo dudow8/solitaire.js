@@ -11,13 +11,13 @@ const suitSymbol = {
 const Card = ({ label, suit, flipped = false, draggable = false, ondrag = null, onDoubleClick = null }) => (
     <S.Container
         $suit={suit}
+        onDoubleClick={onDoubleClick}
         draggable={draggable}
         onDragStart={(e) => {
             if (draggable && typeof ondrag === 'function') {
                 ondrag(e);
             }
-        }}
-        onDoubleClick={onDoubleClick}>
+        }}>
         {!flipped &&
             <S.Face>
                 <S.FaceHeadline>

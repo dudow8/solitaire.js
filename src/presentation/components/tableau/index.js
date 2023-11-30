@@ -8,6 +8,7 @@ import {
     moveCardStackBetweenTableauPiles,
     moveCardFromStockToTableau,
     moveCardFromFoundationToTableau,
+    predictTableauMove,
 } from '../../../application';
 import Card from '../card';
 
@@ -15,6 +16,12 @@ const Tableau = () => {
     const tableau = useSolitaireState('tableau');
     const dragAndDrop = useDragAndDropContext();
     const piles = Object.keys(tableau.piles);
+
+    const onDoubleClick = (e, flipped, pile, card_position) => {
+        if (!flipped) {
+            predictTableauMove(pile, card_position);
+        }
+    };
 
     const ondrag = (e, pile, card_position) => {
         const payload = {
@@ -83,6 +90,9 @@ const Tableau = () => {
                             suit={card.suit}
                             flipped={card.flipped}
                             draggable={!card.flipped}
+                            onDoubleClick={(e) => {
+                                onDoubleClick(e, card.flipped, pile, card_index);
+                            }}
                             ondrag={(e) => {
                                 ondrag(e, pile, card_index);
                             }} />

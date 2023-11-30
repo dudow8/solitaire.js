@@ -7,8 +7,9 @@ const {
 const {
     Game,
     Stock,
-    Foundation,
     Tableau,
+    Foundation,
+    Prediction,
 } = require('../model/index');
 
 const response = (payload = {}) => ({
@@ -16,6 +17,7 @@ const response = (payload = {}) => ({
     error: { status: 'error', payload },
 });
 
+// TODO :: subscribe event store changes to check automaticaly by event
 const checkGameComplete = () => {
     const snapshot = getSnapshot();
     const event = Game.completeGame(snapshot);
@@ -32,8 +34,41 @@ const newGame = () => {
         append(event);
         return response().success;
     }
+
     return response().error;
 };
+
+const predictStockMove = () => {
+    const snapshot = getSnapshot();
+    const event = Prediction.predictStockMove(snapshot);
+
+    if (event) {
+        append(event);
+        return response().success;
+    }
+
+    return response({
+        message: 'no possible movement was predicted',
+    }).error;
+};
+
+const predictTableauMove = (from_tableau_pile_index, from_pile_card_position) => {
+    const snapshot = getSnapshot();
+    const payload = {
+        from_tableau_pile_index,
+        from_pile_card_position,
+    };
+    const event = Prediction.predictTableauMove(snapshot, payload);
+
+    if (event) {
+        append(event);
+        return response().success;
+    }
+
+    return response({
+        message: 'no possible movement was predicted',
+    }).error;
+}
 
 const flipStockCard = () => {
     const snapshot = getSnapshot();
@@ -43,21 +78,9 @@ const flipStockCard = () => {
         append(event);
         return response().success;
     }
+
     return response().error;
 }
-
-const predictStockMove = () => {
-    const snapshot = getSnapshot();
-    const event = Stock.predictMove(snapshot);
-
-    if (event) {
-        append(event);
-        return response().success;
-    }
-    return response({
-        message: 'no possible movement was predicted',
-    }).error;
-};
 
 const moveCardFromStockToFoundation = (stockIndex, foundationPileIndex) => {
     const snapshot = getSnapshot();
@@ -72,6 +95,7 @@ const moveCardFromStockToFoundation = (stockIndex, foundationPileIndex) => {
         checkGameComplete();
         return response().success;
     }
+
     return response().error;
 }
 
@@ -88,6 +112,7 @@ const moveCardFromTableauToFoundation = (tableauPileIndex, foundationPileIndex) 
         checkGameComplete();
         return response().success;
     }
+
     return response().error;
 }
 
@@ -104,6 +129,7 @@ const moveCardStackBetweenTableauPiles = (fromTableauPileIndex, fromPileCardPosi
         append(event);
         return response().success;
     }
+
     return response().error;
 }
 
@@ -119,6 +145,7 @@ const moveCardFromStockToTableau = (stockIndex, tableauPileIndex) => {
         append(event);
         return response().success;
     }
+
     return response().error;
 }
 
@@ -134,13 +161,15 @@ const moveCardFromFoundationToTableau = (foundationPileIndex, tableauPileIndex) 
         append(event);
         return response().success;
     }
+
     return response().error;
 }
 
 module.exports = {
     newGame,
-    flipStockCard,
     predictStockMove,
+    predictTableauMove,
+    flipStockCard,
     moveCardFromStockToFoundation,
     moveCardFromTableauToFoundation,
     moveCardStackBetweenTableauPiles,

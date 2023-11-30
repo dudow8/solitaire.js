@@ -16,13 +16,13 @@ const Stock = () => {
         ? stock.pile.slice(0, stock.active.index + 1)
         : [];
 
+    const onDoubleClick = (e) => {
+        predictStockMove();
+    };
+
     const ondrag = (e) => {
         const payload = stock.active;
         dragAndDrop.drag('solitaire/stock-card', payload);
-    };
-
-    const onDoubleClick = (e) => {
-        predictStockMove();
     };
 
     return (
