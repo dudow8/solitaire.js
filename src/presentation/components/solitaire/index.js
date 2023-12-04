@@ -5,25 +5,30 @@ import { newGame } from '../../../application/index';
 import Tableau from '../tableau';
 import Foundation from '../foundation';
 import Stock from '../stock';
-import { DragAndDropProvider, useGameplayState } from '../../hooks';
+import { DragAndDropProvider } from '../../hooks/daganddrop';
+import { KeyBindingProvider } from '../../hooks/keybinding';
+import { useGameplayState } from '../../hooks/state';
 
 const GlobalStyle = createGlobalStyle`
     html, body {
         margin: 0px;
         padding: 0px;
+        width: 100vw;
+        min-height: 100vh;
     }
 
     #root {
+        width: 100vw;
+        min-height: 100vh;
         margin: 0px;
         padding: 0px;
-        position: fixed;
-        width: 100vw;
-        height: 100vh;
         background-color: #1A4314;
         display: flex;
         justify-content: center;
+        overflow: hidden;
 
         > div {
+            /* zoom: 64%; */
             /* transform: scale(60%) translateX(20%); */
             /* transform-origin: top left; */
         }
@@ -33,7 +38,7 @@ const GlobalStyle = createGlobalStyle`
 const GameLayout = styled.div`
     display: flex;
     flex-direction: column;
-    height: auto;
+    margin-bottom: 50px;
 `;
 
 const GameLayoutHead = styled.div`
@@ -45,7 +50,7 @@ const GameLayoutHead = styled.div`
 const Score = styled.div`
     color: white;
     font-size: 30px;
-    margin: 10px 100px 50px;
+    margin: 20px 0;
     display: flex;
     justify-content: space-between;
 `;
@@ -56,18 +61,20 @@ const Solitaire = () => {
     const gameplay = useGameplayState('score');
     return (
         <DragAndDropProvider>
-            <GameLayout>
+            <KeyBindingProvider>
                 <GlobalStyle />
-                <Score>
-                    <span>score: {gameplay.score}</span>
-                    <span>moves: {gameplay.moves}</span>
-                </Score>
-                <GameLayoutHead>
-                    <Foundation />
-                    <Stock />
-                </GameLayoutHead>
-                <Tableau />
-            </GameLayout>
+                <GameLayout>
+                    <Score>
+                        <span>score: {gameplay.score}</span>
+                        <span>moves: {gameplay.moves}</span>
+                    </Score>
+                    <GameLayoutHead>
+                        <Foundation />
+                        <Stock />
+                    </GameLayoutHead>
+                    <Tableau />
+                </GameLayout>
+            </KeyBindingProvider>
         </DragAndDropProvider>
     );
 }

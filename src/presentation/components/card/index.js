@@ -8,9 +8,10 @@ const suitSymbol = {
     spade: '♠',
 };
 
-const Card = ({ label, suit, flipped = false, draggable = false, ondrag = null, onDoubleClick = null }) => (
+const Card = ({ label, suit, flipped = false, selected = false, draggable = false, ondrag = null, onDoubleClick = null }) => (
     <S.Container
         $suit={suit}
+        $selected={selected}
         onDoubleClick={onDoubleClick}
         draggable={draggable}
         onDragStart={(e) => {

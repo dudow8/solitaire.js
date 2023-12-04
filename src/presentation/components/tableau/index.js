@@ -1,9 +1,8 @@
 import React from 'react';
 import { styled } from 'styled-components';
-import {
-    useSolitaireState,
-    useDragAndDropContext,
-} from '../../hooks';
+import { useSolitaireState } from '../../hooks/state';
+import { useDragAndDropContext } from '../../hooks/daganddrop';
+import { useKeyBindingContext } from '../../hooks/keybinding';
 import {
     moveCardStackBetweenTableauPiles,
     moveCardFromStockToTableau,
@@ -15,7 +14,14 @@ import Card from '../card';
 const Tableau = () => {
     const tableau = useSolitaireState('tableau');
     const dragAndDrop = useDragAndDropContext();
+    const cardSelection = useKeyBindingContext();
     const piles = Object.keys(tableau.piles);
+
+    const checkSelection = (pile, card_position) => {
+        const { tableau_pile, tableau_card_position } = cardSelection;
+        const selected = pile == tableau_pile && card_position == tableau_card_position;
+        return selected;
+    }
 
     const onDoubleClick = (e, flipped, pile, card_position) => {
         if (!flipped) {
@@ -83,20 +89,24 @@ const Tableau = () => {
                         dragAndDrop.drop();
                     }}
                 >
-                    {tableau.piles[pile].map((card, card_index) =>
-                        <Card
-                            key={card_index}
-                            label={card.value}
-                            suit={card.suit}
-                            flipped={card.flipped}
-                            draggable={!card.flipped}
-                            onDoubleClick={(e) => {
-                                onDoubleClick(e, card.flipped, pile, card_index);
-                            }}
-                            ondrag={(e) => {
-                                ondrag(e, pile, card_index);
-                            }} />
-                    )}
+                    {tableau.piles[pile].map((card, card_index) => {
+                        const selected = checkSelection(pile, card_index);
+                        return (
+                            <Card
+                                selected={selected}
+                                key={card_index}
+                                label={card.value}
+                                suit={card.suit}
+                                flipped={card.flipped}
+                                draggable={!card.flipped}
+                                onDoubleClick={(e) => {
+                                    onDoubleClick(e, card.flipped, pile, card_index);
+                                }}
+                                ondrag={(e) => {
+                                    ondrag(e, pile, card_index);
+                                }} />
+                        )
+                    })}
                 </Pile>
             ))}
         </Container>
@@ -128,8 +138,12 @@ const Pile = styled.div`
     }
 
     > * {
-        margin-bottom: -145px;
         box-shadow: 0px 0px 5px rgba(0, 0, 0, .5);
+        margin-bottom: -145px;
+
+        &:last-child {
+            margin-bottom: 0px;
+        }
     }
 `;
 

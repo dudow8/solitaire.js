@@ -1,4 +1,4 @@
-import { styled } from 'styled-components';
+import { styled, css } from 'styled-components';
 
 const suitColor = {
     diamond: '#961316',
@@ -6,6 +6,20 @@ const suitColor = {
     club: '#050A30',
     spade: '#050A30',
 };
+
+const cardSelected = css`
+    content: '';
+    color: white;
+    top: 0px;
+    left: calc(50% - 6px);
+    box-sizing: border-box;
+    border: 12px solid transparent;
+    border-top: 12px solid green;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
 
 const Container = styled.div`
     cursor: default;
@@ -16,7 +30,12 @@ const Container = styled.div`
     height: 180px;
     border-radius: 10px;
     box-sizing: border-box;
-    color: ${({$suit}) => suitColor[$suit]};
+    color: ${({ $suit }) => suitColor[$suit]};
+    position: relative;
+
+    &::before {
+        ${({ $selected }) => $selected && cardSelected}
+    }
 `;
 
 const Face = styled.div`
@@ -79,5 +98,5 @@ export {
     FaceHeadlineLabel,
     FaceHeadlineSuit,
     FaceSuit,
-    Back,    
+    Back,
 };

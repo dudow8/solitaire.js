@@ -1,9 +1,7 @@
 import React from 'react';
 import { styled } from 'styled-components';
-import {
-    useSolitaireState,
-    useDragAndDropContext
-} from '../../hooks';
+import { useSolitaireState } from '../../hooks/state';
+import { useDragAndDropContext } from '../../hooks/daganddrop';
 import {
     moveCardFromStockToFoundation,
     moveCardFromTableauToFoundation,

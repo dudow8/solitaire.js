@@ -1,7 +1,8 @@
 import React from "react";
 import { styled } from "styled-components";
 import Card from "../card";
-import { useSolitaireState, useDragAndDropContext } from "../../hooks";
+import { useSolitaireState } from "../../hooks/state";
+import { useDragAndDropContext } from "../../hooks/daganddrop";
 import { flipStockCard, predictStockMove } from '../../../application';
 
 const Stock = () => {
