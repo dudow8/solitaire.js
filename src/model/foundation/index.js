@@ -26,7 +26,10 @@ const isValidFoundationSequence = (bottomCard, topCard) => {
     return false;
 }
 
-const moveCardFromTableauToFoundation = (state, { tableauPileIndex, foundationPileIndex }) => {
+const moveCardFromTableauToFoundation = (state, { tableauPileIndex = null, foundationPileIndex = null }) => {
+    if (tableauPileIndex === null || foundationPileIndex === null)
+        return null;
+
     const tableauPile = state.tableau.piles[tableauPileIndex];
     const foundationPile = state.foundation.piles[foundationPileIndex];
 
@@ -47,9 +50,11 @@ const moveCardFromTableauToFoundation = (state, { tableauPileIndex, foundationPi
     return null;
 };
 
-const moveCardFromStockToFoundation = (state, { stockIndex, foundationPileIndex }) => {
-    const foundationPile = state.foundation.piles[foundationPileIndex];
+const moveCardFromStockToFoundation = (state, { stockIndex = null, foundationPileIndex = null }) => {
+    if (stockIndex === null || foundationPileIndex === null)
+        return null;
 
+    const foundationPile = state.foundation.piles[foundationPileIndex];
     const stockCard = state.stock.pile[stockIndex];
     const foundationTopCard = foundationPile[foundationPile.length - 1] || null;
 

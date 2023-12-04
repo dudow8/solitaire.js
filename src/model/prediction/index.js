@@ -17,30 +17,36 @@ const predictStockMoveToFoundation = (state) => {
     const { index: stockIndex } = state.stock.active;
     const piles = Object.keys(state.foundation.piles);
 
-    const event = piles.reduce((event, foundationPileIndex) => {
-        if (event !== null) {
-            return event;
-        }
-        const payload = { stockIndex, foundationPileIndex };
-        return Foundation.moveCardFromStockToFoundation(state, payload);
-    }, null);
+    if (stockIndex !== null) {
+        const event = piles.reduce((event, foundationPileIndex) => {
+            if (event !== null) {
+                return event;
+            }
+            const payload = { stockIndex, foundationPileIndex };
+            return Foundation.moveCardFromStockToFoundation(state, payload);
+        }, null);
+        return event;
+    }
 
-    return event;
+    return null;
 };
 
 const predictStockMoveToTableau = (state) => {
     const { index: stockIndex } = state.stock.active;
     const piles = Object.keys(state.tableau.piles);
 
-    const event = piles.reduce((event, tableauPileIndex) => {
-        if (event !== null) {
-            return event;
-        }
-        const payload = { stockIndex, tableauPileIndex };
-        return Tableau.moveCardFromStockToTableau(state, payload);
-    }, null);
+    if (stockIndex !== null) {
+        const event = piles.reduce((event, tableauPileIndex) => {
+            if (event !== null) {
+                return event;
+            }
+            const payload = { stockIndex, tableauPileIndex };
+            return Tableau.moveCardFromStockToTableau(state, payload);
+        }, null);
 
-    return event;
+        return event;
+    }
+    return null;
 };
 
 const predictStockMove = (state) => {
@@ -55,8 +61,9 @@ const predictStockMove = (state) => {
 
 const predictTableauMoveToFoundation = (state, { fromTableauPileIndex, fromPileCardPosition }) => {
     const fromPile = state.tableau.piles[fromTableauPileIndex];
+    const fromPosition = fromPileCardPosition === null ? fromPile.length - 1 : fromPileCardPosition;
 
-    if (fromPileCardPosition === fromPile.length - 1) {
+    if (fromPosition === fromPile.length - 1) {
         const piles = Object.keys(state.foundation.piles);
 
         const event = piles.reduce((event, foundationPileIndex) => {
@@ -80,7 +87,7 @@ const predictTableauMoveBetweenPiles = (state, { fromTableauPileIndex, fromPileC
     const tableauPiles = state.tableau.piles;
     const topMovingCard = tableauPiles[fromTableauPileIndex][fromPileCardPosition];
 
-    if (!topMovingCard.flipped) {
+    if (topMovingCard && !topMovingCard.flipped) {
         const piles = Object.keys(tableauPiles);
 
         const event = piles.reduce((event, pile_index) => {
@@ -102,7 +109,10 @@ const predictTableauMoveBetweenPiles = (state, { fromTableauPileIndex, fromPileC
     return null;
 };
 
-const predictTableauMove = (state, { fromTableauPileIndex, fromPileCardPosition }) => {
+const predictTableauMove = (state, { fromTableauPileIndex = null, fromPileCardPosition = null }) => {
+    if (fromTableauPileIndex === null)
+        return null;
+
     const steps = [
         predictTableauMoveToFoundation,
         predictTableauMoveBetweenPiles,

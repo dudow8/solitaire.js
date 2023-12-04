@@ -38,6 +38,28 @@ describe('Model/Foundation', () => {
             expect(event.payload.card).toEqual(heartTwoCard);
         });
 
+        test('Should return null if there is missing arguments', () => {
+            const state = {
+                foundation: {
+                    piles: {
+                        1: [heartAceCard],
+                    }
+                },
+                tableau: {
+                    piles: {
+                        1: [heartTwoCard],
+                    }
+                }
+            };
+            const move = {
+                // tableauPileIndex: 1,
+                // foundationPileIndex: 1
+            };
+
+            const event = moveCardFromTableauToFoundation(state, move);
+            expect(event).toBeNull();
+        });
+
         test('Should return null when the top card is an invalid set sequence', () => {
             const state = {
                 foundation: {
@@ -148,6 +170,26 @@ describe('Model/Foundation', () => {
             const event = moveCardFromStockToFoundation(state, move);
             expect(event).not.toBeNull();
             expect(event.payload.card).toEqual(heartAceCard);
+        });
+
+        test('Should return null if there is missing arguments', () => {
+            const state = {
+                foundation: {
+                    piles: {
+                        1: []
+                    },
+                },
+                stock: {
+                    pile: [heartAceCard]
+                },
+            };
+            const move = {
+                // stockIndex: 0,
+                // foundationPileIndex: 1
+            };
+
+            const event = moveCardFromStockToFoundation(state, move);
+            expect(event).toBeNull();
         });
 
         test('Should return null when the top card is an invalid set sequence', () => {

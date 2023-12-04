@@ -27,7 +27,16 @@ const isValidTableauSequence = (bottomCard, topCard) => {
     return false;
 }
 
-const moveCardStackBetweenTableauPiles = (state, { fromTableauPileIndex, fromPileCardPosition, toTableauPileIndex }) => {
+const moveCardStackBetweenTableauPiles = (state, {
+    fromTableauPileIndex = null,
+    fromPileCardPosition = null,
+    toTableauPileIndex = null
+}) => {
+    if (fromTableauPileIndex === null
+        || fromPileCardPosition === null
+        || toTableauPileIndex === null
+    ) return null;
+
     if (fromTableauPileIndex === toTableauPileIndex)
         return null;
 
@@ -53,9 +62,11 @@ const moveCardStackBetweenTableauPiles = (state, { fromTableauPileIndex, fromPil
     return null;
 };
 
-const moveCardFromStockToTableau = (state, { stockIndex, tableauPileIndex }) => {
-    const tableauPile = state.tableau.piles[tableauPileIndex];
+const moveCardFromStockToTableau = (state, { stockIndex = null, tableauPileIndex = null }) => {
+    if (stockIndex === null || tableauPileIndex === null)
+        return null;
 
+    const tableauPile = state.tableau.piles[tableauPileIndex];
     const stockCard = state.stock.pile[stockIndex];
     const tableauTopCard = tableauPile[tableauPile.length - 1] || null;
 
@@ -73,7 +84,10 @@ const moveCardFromStockToTableau = (state, { stockIndex, tableauPileIndex }) => 
     return null;
 };
 
-const moveCardFromFoundationToTableau = (state, { foundationPileIndex, tableauPileIndex }) => {
+const moveCardFromFoundationToTableau = (state, { foundationPileIndex = null, tableauPileIndex = null }) => {
+    if (foundationPileIndex === null || tableauPileIndex === null)
+        return null;
+
     const foudationPile = state.foundation.piles[foundationPileIndex];
     const tableauPile = state.tableau.piles[tableauPileIndex];
 
