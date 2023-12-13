@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
-import { newGame } from '../../../application/index';
+import { newGame } from '../../../application/factory';
 
 import Tableau from '../tableau';
 import Foundation from '../foundation';

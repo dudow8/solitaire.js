@@ -1,11 +1,14 @@
-const {
-    append,
-    computeState,
-    getEventStore,
-    dropEventStore,
-} = require('./index');
+const pubsub = require('../../pubsub');
+const memoryEventStore = require('./index');
 
-describe('Commons/Store', () => {
+describe('Commons/Store/Memory', () => {
+    const {
+        append,
+        computeState,
+        getEventStore,
+        dropEventStore,
+    } = memoryEventStore(pubsub);
+
     describe('computeState()', () => {
         test('a snapshot should be created based on the eventStore and hooks', () => {
             const reduces = {

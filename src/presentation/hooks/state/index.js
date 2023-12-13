@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from 'react';
-import ModelProjection from '../../../projection/model';
-import GameplayProjection from '../../../projection/gameplay';
+import ModelProjection from '../../../projection/model/factory';
+import GameplayProjection from '../../../projection/gameplay/factory';
 
 const useSolitaireState = (selector = null) => {
     const state = useSyncExternalStore(

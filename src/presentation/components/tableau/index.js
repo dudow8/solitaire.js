@@ -8,7 +8,7 @@ import {
     moveCardFromStockToTableau,
     moveCardFromFoundationToTableau,
     predictTableauMove,
-} from '../../../application';
+} from '../../../application/factory';
 import Card from '../card';
 
 const Tableau = () => {
