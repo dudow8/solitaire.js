@@ -1,15 +1,28 @@
 const projectionFactory = require('./index');
 const { initializeGame } = require('../../model/game');
-const store = require('../store');
+const store = require('../store/factory');
+const pubsub = require('../pubsub');
 const stock = require('../../projection/model/stock');
 
 describe('Commons/Projection', () => {
     const {
-        append,
         subscribe,
         getSnapshot,
-        dropEventStore,
-    } = projectionFactory('projection-model', { stock });
+    } = projectionFactory(store, pubsub, 'projection-model', { stock });
+
+    test('should return a projection instance without exceptions', () => {
+        expect(() => {
+            {
+                projectionFactory(store, pubsub, 'projection-model', { stock });
+            }
+        }).not.toThrowError();
+
+        expect(() => {
+            {
+                projectionFactory();
+            }
+        }).toThrowError();
+    });
 
     test('should invoke a subscribed callback after a event append', () => {
         const callback = jest.fn();
@@ -48,7 +61,7 @@ describe('Commons/Projection', () => {
         store.append(event);
 
         const cachedSnapshotBeforeDrop = getSnapshot();
-        dropEventStore();
+        store.dropEventStore();
         const cachedSnapshotAfterDrop = getSnapshot();
 
         expect(dropEventStoreMock).toBeCalled();

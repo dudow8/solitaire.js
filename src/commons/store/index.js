@@ -1,55 +1,66 @@
-const pubsub = require('../pubsub');
-
 const PUBSUB_TOPIC = 'event-store';
-const eventStore = [];
-
-const append = (event) => {
-    if (event === null)
-        throw 'error trying to append a null event to the store';
-
-    eventStore.push(event);
-    pubsub.notify(PUBSUB_TOPIC, event);
+const EVENTS = {
+    DROP_STORE: 'event-store/drop',
 };
 
-const getEventStore = () => {
-    return Array.from(eventStore);
-};
+const eventStore = (stream, pubsub) => {
+    const append = (event) => {
+        if (event === null)
+            throw 'error trying to append a null event to the store';
 
-const dropEventStore = () => {
-    eventStore.length = 0;
-};
+        stream.append(event);
+        pubsub.notify(PUBSUB_TOPIC, event);
+    };
 
-const computeState = (state, events, reduces) => {
-    if (state === null || typeof state !== 'object') {
-        return null;
-    }
+    const getEventStore = () => {
+        return stream.getAll();
+    };
 
-    const stateObjectKeys = Object.keys(reduces);
-    return events.reduce((state, event) => {
-        return stateObjectKeys.reduce((snapshot, stateKey) => {
-            const reducer = reduces[stateKey][event.type];
-            const stateObject = Object.freeze(state[stateKey]);
-            if (reducer) {
-                const obj = {
-                    ...snapshot,
-                    [stateKey]: reducer(stateObject, event),
-                };
-                return obj;
-            }
-            return snapshot;
+    const dropEventStore = () => {
+        const event = {
+            type: EVENTS.DROP_STORE,
+        };
+        stream.drop();
+        pubsub.notify(PUBSUB_TOPIC, event);
+    };
+
+    const computeState = (state, events, reduces) => {
+        if (state === null || typeof state !== 'object') {
+            return null;
+        }
+
+        const stateObjectKeys = Object.keys(reduces);
+        return events.reduce((state, event) => {
+            return stateObjectKeys.reduce((snapshot, stateKey) => {
+                const reducer = reduces[stateKey][event.type];
+                const stateObject = Object.freeze(state[stateKey]);
+                if (reducer) {
+                    const obj = {
+                        ...snapshot,
+                        [stateKey]: reducer(stateObject, event),
+                    };
+                    return obj;
+                }
+                return snapshot;
+            }, state);
         }, state);
-    }, state);
-};
+    };
 
-const subscribe = (callback) => {
-    const unsubscribe = pubsub.subscribe(PUBSUB_TOPIC, callback);
-    return unsubscribe;
-};
+    const subscribe = (callback) => {
+        const unsubscribe = pubsub.subscribe(PUBSUB_TOPIC, callback);
+        return unsubscribe;
+    };
+
+    return {
+        append,
+        subscribe,
+        getEventStore,
+        computeState,
+        dropEventStore,
+    };
+}
 
 module.exports = {
-    append,
-    subscribe,
-    getEventStore,
-    computeState,
-    dropEventStore,
+    eventStore,
+    EVENTS,
 };

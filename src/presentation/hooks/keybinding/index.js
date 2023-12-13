@@ -1,5 +1,5 @@
 import React, { useEffect, useState, createContext, useContext } from 'react';
-import Application from '../../../application';
+import Application from '../../../application/factory';
 import { useSolitaireState } from '../state';
 import { useCarousel } from '../carousel';
 

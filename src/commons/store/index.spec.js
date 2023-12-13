@@ -1,11 +1,17 @@
-const {
-    append,
-    computeState,
-    getEventStore,
-    dropEventStore,
-} = require('./index');
+const pubsub = require('../pubsub');
+const { eventStore } = require('./index');
+const memoryStorageStream = require('./memorystorage');
 
 describe('Commons/Store', () => {
+    const stream = memoryStorageStream.factory()
+    const {
+        append,
+        computeState,
+        getEventStore,
+        dropEventStore,
+        subscribe,
+    } = eventStore(stream, pubsub);
+
     describe('computeState()', () => {
         test('a snapshot should be created based on the eventStore and hooks', () => {
             const reduces = {
@@ -102,6 +108,26 @@ describe('Commons/Store', () => {
             expect(() => {
                 append(event);
             }).toThrowError();
+        });
+    })
+
+    describe('subscribe()', () => {
+        test('should assert all subscription and notification flow', () => {
+            const callback = jest.fn();
+            const unsubscribe = subscribe(callback);
+            const events = [{
+                type: 'state/started',
+                payload: {}
+            }, {
+                type: 'state/changed',
+                payload: {}
+            }];
+
+            events.map(append);
+            expect(callback).toBeCalledTimes(2);
+
+            expect(typeof unsubscribe).toBe('function');
+            getEventStore();
         });
     })
 });

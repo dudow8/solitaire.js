@@ -5,7 +5,7 @@ import { useDragAndDropContext } from '../../hooks/daganddrop';
 import {
     moveCardFromStockToFoundation,
     moveCardFromTableauToFoundation,
-} from '../../../application';
+} from '../../../application/factory';
 import Card from '../card';
 
 const Foundation = () => {

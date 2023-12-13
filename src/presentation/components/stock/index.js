@@ -3,7 +3,7 @@ import { styled } from "styled-components";
 import Card from "../card";
 import { useSolitaireState } from "../../hooks/state";
 import { useDragAndDropContext } from "../../hooks/daganddrop";
-import { flipStockCard, predictStockMove } from '../../../application';
+import { flipStockCard, predictStockMove } from '../../../application/factory';
 
 const Stock = () => {
     const stock = useSolitaireState('stock');
