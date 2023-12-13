@@ -1,6 +1,6 @@
 const projectionFactory = require('./index');
 const { initializeGame } = require('../../model/game');
-const { memoryEventStore: store } = require('../store/factory');
+const store = require('../store/factory');
 const pubsub = require('../pubsub');
 const stock = require('../../projection/model/stock');
 

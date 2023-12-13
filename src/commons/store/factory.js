@@ -1,15 +1,13 @@
 const pubsub = require('../pubsub');
-const memory = require('./memory');
+const memoryEventStore = require('./memory');
 
-let memoryEventStore = null;
+let eventStore = null;
 
-const memoryStoreFaEventctory = () => {
-    if (!memoryEventStore)
-        memoryEventStore = memory(pubsub);
+const eventStoreFactory = () => {
+    if (!eventStore)
+    eventStore = memoryEventStore(pubsub);
 
-    return memoryEventStore;
-}
-
-module.exports = {
-    memoryEventStore: memoryStoreFaEventctory(),
+    return eventStore;
 };
+
+module.exports = eventStoreFactory();

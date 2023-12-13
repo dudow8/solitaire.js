@@ -1,17 +1,17 @@
 const application = require('./index');
-const { memoryEventStore } = require('../commons/store/factory');
+const eventStore = require('../commons/store/factory');
 const projection = require('../projection/model/factory');
 
-let applcationWithMemoryEventStore = null;
+let _application = null;
 
-const applcationWithMemoryEventStoreFactory = () => {
-    if (!applcationWithMemoryEventStore)
-        applcationWithMemoryEventStore = application(
-            memoryEventStore,
+const applcationFactory = () => {
+    if (!_application)
+        _application = application(
+            eventStore,
             projection
         );
 
-    return applcationWithMemoryEventStore;
+    return _application;
 };
 
-module.exports = applcationWithMemoryEventStoreFactory()
+module.exports = applcationFactory()
