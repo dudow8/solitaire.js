@@ -1,13 +1,24 @@
 const pubsub = require('../pubsub');
-const memoryEventStore = require('./memory');
+const localStorageStream = require('./localstorage');
+const memoryStorageStream = require('./memorystorage');
+const eventStore = require('./index');
 
-let eventStore = null;
+let _eventStore = null;
+
+const getStream = () => {
+    if (process.env.presentation === 'web')
+        return localStorageStream.factory()
+
+    return memoryStorageStream.factory();
+};
 
 const eventStoreFactory = () => {
-    if (!eventStore)
-    eventStore = memoryEventStore(pubsub);
+    if (!_eventStore) {
+        const stream = getStream();
+        _eventStore = eventStore(stream, pubsub);
+    }
 
-    return eventStore;
+    return _eventStore;
 };
 
 module.exports = eventStoreFactory();

@@ -1,22 +1,20 @@
 const PUBSUB_TOPIC = 'event-store';
 
-const memoryEventStore = (pubsub) => {
-    const eventStore = [];
-
+const eventStore = (stream, pubsub) => {
     const append = (event) => {
         if (event === null)
             throw 'error trying to append a null event to the store';
 
-        eventStore.push(event);
+        stream.append(event);
         pubsub.notify(PUBSUB_TOPIC, event);
     };
 
     const getEventStore = () => {
-        return Array.from(eventStore);
+        return stream.getAll();
     };
 
     const dropEventStore = () => {
-        eventStore.length = 0;
+        stream.drop();
     };
 
     const computeState = (state, events, reduces) => {
@@ -55,4 +53,4 @@ const memoryEventStore = (pubsub) => {
     };
 }
 
-module.exports = memoryEventStore;
+module.exports = eventStore;

@@ -1,5 +1,6 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require("path");
+const { EnvironmentPlugin } = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     mode: "development",
@@ -31,6 +32,9 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: path.join(__dirname, 'src/presentation', 'index.html')
-        })
+        }),
+        new EnvironmentPlugin({
+            presentation: 'web',
+        }),
     ]
 }
