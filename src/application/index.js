@@ -11,7 +11,7 @@ const response = (payload = {}) => ({
     error: { status: 'error', payload },
 });
 
-const application = ({ append }, { getSnapshot, dropEventStore }) => {
+const application = ({ append, dropEventStore }, { getSnapshot }) => {
     // TODO :: subscribe event store changes to check automaticaly by event
     const checkGameComplete = () => {
         const snapshot = getSnapshot();
@@ -39,6 +39,7 @@ const application = ({ append }, { getSnapshot, dropEventStore }) => {
 
         if (event) {
             append(event);
+            checkGameComplete();
             return response().success;
         }
 
@@ -57,6 +58,7 @@ const application = ({ append }, { getSnapshot, dropEventStore }) => {
 
         if (event) {
             append(event);
+            checkGameComplete();
             return response().success;
         }
 

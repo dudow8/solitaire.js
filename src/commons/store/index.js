@@ -1,4 +1,7 @@
 const PUBSUB_TOPIC = 'event-store';
+const EVENTS = {
+    DROP_STORE: 'event-store/drop',
+};
 
 const eventStore = (stream, pubsub) => {
     const append = (event) => {
@@ -14,7 +17,11 @@ const eventStore = (stream, pubsub) => {
     };
 
     const dropEventStore = () => {
+        const event = {
+            type: EVENTS.DROP_STORE,
+        };
         stream.drop();
+        pubsub.notify(PUBSUB_TOPIC, event);
     };
 
     const computeState = (state, events, reduces) => {
@@ -53,4 +60,7 @@ const eventStore = (stream, pubsub) => {
     };
 }
 
-module.exports = eventStore;
+module.exports = {
+    eventStore,
+    EVENTS,
+};

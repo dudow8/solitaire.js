@@ -8,7 +8,6 @@ describe('Commons/Projection', () => {
     const {
         subscribe,
         getSnapshot,
-        dropEventStore,
     } = projectionFactory(store, pubsub, 'projection-model', { stock });
 
     test('should return a projection instance without exceptions', () => {
@@ -62,7 +61,7 @@ describe('Commons/Projection', () => {
         store.append(event);
 
         const cachedSnapshotBeforeDrop = getSnapshot();
-        dropEventStore();
+        store.dropEventStore();
         const cachedSnapshotAfterDrop = getSnapshot();
 
         expect(dropEventStoreMock).toBeCalled();

@@ -1,5 +1,5 @@
 const pubsub = require('../pubsub');
-const eventStore = require('./index');
+const { eventStore } = require('./index');
 const memoryStorageStream = require('./memorystorage');
 
 describe('Commons/Store', () => {

@@ -1,3 +1,5 @@
+const { EVENTS: STORE_EVENTS } = require('../store');
+
 const projection = (store, pubsub, PUBSUB_TOPIC, hooks) => {
     let snapshot = {};
 
@@ -6,8 +8,17 @@ const projection = (store, pubsub, PUBSUB_TOPIC, hooks) => {
         pubsub.notify(PUBSUB_TOPIC);
     };
 
+    const onDropEventStore = (event) => {
+        if (event.type === STORE_EVENTS.DROP_STORE)
+            snapshot = {};
+    }
+
     const storeSubscribe = () => {
-        store.subscribe(onStoreAppendEvent);
+        const subscribe = [
+            onStoreAppendEvent,
+            onDropEventStore,
+        ];
+        subscribe.map(store.subscribe);
     }
 
     const subscribe = (callback) => {
@@ -18,11 +29,6 @@ const projection = (store, pubsub, PUBSUB_TOPIC, hooks) => {
     const getSnapshot = () => {
         return snapshot;
     };
-
-    const dropEventStore = () => {
-        store.dropEventStore();
-        snapshot = {};
-    }
 
     const cacheSnapshot = (event) => {
         const state = getSnapshot();
@@ -37,7 +43,6 @@ const projection = (store, pubsub, PUBSUB_TOPIC, hooks) => {
     return {
         subscribe,
         getSnapshot,
-        dropEventStore,
     };
 };
 

@@ -1,7 +1,7 @@
 const pubsub = require('../pubsub');
 const localStorageStream = require('./localstorage');
 const memoryStorageStream = require('./memorystorage');
-const eventStore = require('./index');
+const { eventStore } = require('./index');
 
 let _eventStore = null;
 
