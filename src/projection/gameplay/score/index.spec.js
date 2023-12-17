@@ -1,4 +1,5 @@
 const ScoreProjection = require('./index');
+const Projection = require('../../../commons/projection');
 const {
     Game,
     Stock,
@@ -7,6 +8,21 @@ const {
 } = require('../../../model');
 
 describe('Projection/Score', () => {
+    describe('onCreate()', () => {
+        const onCreate = ScoreProjection[Projection.EVENTS.INITIALIZED];
+
+        test('should return the initial value', () => {
+            const state = onCreate();
+            const expected_state = {
+                score: 0,
+                moves: 0,
+                game_state: Game.STATE.NOT_STARTED,
+            };
+
+            expect(state).toEqual(expected_state);
+        });
+    });
+
     describe('gameInitialized()', () => {
         const gameInitialized = ScoreProjection[Game.EVENTS.GAME_INITIALIZED];
 

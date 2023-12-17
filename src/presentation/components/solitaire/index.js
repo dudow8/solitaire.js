@@ -1,7 +1,6 @@
 import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import { newGame } from '../../../application/factory';
-
 import Tableau from '../tableau';
 import Foundation from '../foundation';
 import Stock from '../stock';
@@ -47,27 +46,12 @@ const GameLayoutHead = styled.div`
     margin-bottom: 10px;
 `;
 
-const Score = styled.div`
-    color: white;
-    font-size: 30px;
-    margin: 20px 0;
-    display: flex;
-    justify-content: space-between;
-`;
-
-newGame();
-
 const Solitaire = () => {
-    const gameplay = useGameplayState('score');
     return (
         <DragAndDropProvider>
             <KeyBindingProvider>
                 <GlobalStyle />
                 <GameLayout>
-                    <Score>
-                        <span>score: {gameplay.score}</span>
-                        <span>moves: {gameplay.moves}</span>
-                    </Score>
                     <GameLayoutHead>
                         <Foundation />
                         <Stock />

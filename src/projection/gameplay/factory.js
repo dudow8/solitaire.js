@@ -1,7 +1,7 @@
 const pubsub = require('../../commons/pubsub');
 const eventStore = require('../../commons/store/factory');
 const score = require('./score');
-const projection = require('../../commons/projection');
+const { projection } = require('../../commons/projection');
 
 let _projection = null;
 const PUBSUB_TOPIC = 'projection-gameplay';

@@ -1,4 +1,5 @@
 const FoundationProjection = require('./index');
+const Projection = require('../../../commons/projection');
 const {
     Game,
     Tableau,
@@ -12,6 +13,24 @@ const {
 
 describe('Projection/Foundation', () => {
     const heartAceCard = cardFactory(SET.ACE, SUITS.HEART);
+
+    describe('onCreate()', () => {
+        const onCreate = FoundationProjection[Projection.EVENTS.INITIALIZED];
+
+        test('should return the initial value', () => {
+            const state = onCreate();
+            const expected_state = {
+                piles: {
+                    1: [],
+                    2: [],
+                    3: [],
+                    4: [],
+                }
+            };
+
+            expect(state).toEqual(expected_state);
+        });
+    });
 
     describe('gameInitialized()', () => {
         const gameInitialized = FoundationProjection[Game.EVENTS.GAME_INITIALIZED];

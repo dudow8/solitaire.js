@@ -6,6 +6,7 @@ const {
 const STATE = {
     PLAYING: 'playing',
     COMPLETED: 'completed',
+    NOT_STARTED: 'not-started',
 };
 
 const EVENTS = {

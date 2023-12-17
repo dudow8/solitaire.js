@@ -3,7 +3,7 @@ const eventStore = require('../../commons/store/factory');
 const stock = require('./stock');
 const tableau = require('./tableau');
 const foundation = require('./foundation');
-const projection = require('../../commons/projection');
+const { projection } = require('../../commons/projection');
 
 let _projection = null;
 const PUBSUB_TOPIC = 'projection-model';

@@ -1,7 +1,24 @@
 const { EVENTS: STORE_EVENTS } = require('../store');
 
+const EVENTS = {
+    INITIALIZED: 'projection/on-create',
+};
+
 const projection = (store, pubsub, PUBSUB_TOPIC, hooks) => {
     let snapshot = {};
+
+    const onCreate = () => {
+        const events = store.getEvents();
+        if (events.length) {
+            loadEvents(events);
+        }
+        else {
+            const event = { type: EVENTS.INITIALIZED };
+            cacheSnapshot(event);
+        }
+
+        storeSubscribe();
+    };
 
     const onStoreAppendEvent = (event) => {
         cacheSnapshot(event);
@@ -9,7 +26,7 @@ const projection = (store, pubsub, PUBSUB_TOPIC, hooks) => {
     };
 
     const onDropEventStore = (event) => {
-        if (event.type === STORE_EVENTS.DROP_STORE)
+        if (event.type === STORE_EVENTS.DROPPED)
             snapshot = {};
     }
 
@@ -31,19 +48,49 @@ const projection = (store, pubsub, PUBSUB_TOPIC, hooks) => {
     };
 
     const cacheSnapshot = (event) => {
-        const state = getSnapshot();
         const eventStore = [event];
-
-        snapshot = store.computeState(state, eventStore, hooks);
-        snapshot = Object.freeze(snapshot);
+        loadEvents(eventStore)
     };
 
-    storeSubscribe();
+    const loadEvents = (eventStore) => {
+        const state = getSnapshot();
+        snapshot = computeState(state, eventStore, hooks);
+        snapshot = Object.freeze(snapshot);
+    }
+
+    const computeState = (state, events, reduces) => {
+        if (state === null || typeof state !== 'object') {
+            return null;
+        }
+
+        const stateObjectKeys = Object.keys(reduces);
+        return events.reduce((state, event) => {
+            return stateObjectKeys.reduce((snapshot, stateKey) => {
+                const reducer = reduces[stateKey][event.type];
+                const stateObject = Object.freeze(state[stateKey]);
+                if (reducer) {
+                    const obj = {
+                        ...snapshot,
+                        [stateKey]: reducer(stateObject, event),
+                    };
+                    return obj;
+                }
+                return snapshot;
+            }, state);
+        }, state);
+    };
+
+    onCreate();
 
     return {
         subscribe,
+        loadEvents,
         getSnapshot,
+        computeState,
     };
 };
 
-module.exports = projection;
+module.exports = {
+    EVENTS,
+    projection,
+};
