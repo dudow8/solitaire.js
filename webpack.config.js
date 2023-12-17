@@ -11,7 +11,6 @@ module.exports = {
     },
     devServer: {
         port: "8080",
-        // static: ["./public"],
         hot: true,
         liveReload: true
     },
@@ -31,7 +30,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: path.join(__dirname, 'src/presentation', 'index.html')
+            templateContent: `<div id="root"></div>`
         }),
         new EnvironmentPlugin({
             presentation: 'web',
