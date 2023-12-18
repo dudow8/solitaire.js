@@ -14,4 +14,4 @@ const applcationFactory = () => {
     return _application;
 };
 
-module.exports = applcationFactory()
+module.exports = applcationFactory();

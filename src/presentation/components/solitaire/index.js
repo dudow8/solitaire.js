@@ -1,12 +1,11 @@
 import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
-import { newGame } from '../../../application/factory';
+import { DragAndDropProvider } from '../../hooks/daganddrop';
+import { KeyBindingProvider } from '../../hooks/keybinding';
 import Tableau from '../tableau';
 import Foundation from '../foundation';
 import Stock from '../stock';
-import { DragAndDropProvider } from '../../hooks/daganddrop';
-import { KeyBindingProvider } from '../../hooks/keybinding';
-import { useGameplayState } from '../../hooks/state';
+import Controls from '../controls';
 
 const GlobalStyle = createGlobalStyle`
     html, body {
@@ -14,6 +13,7 @@ const GlobalStyle = createGlobalStyle`
         padding: 0px;
         width: 100vw;
         min-height: 100vh;
+        font-family: sans-serif;
     }
 
     #root {
@@ -38,12 +38,12 @@ const GameLayout = styled.div`
     display: flex;
     flex-direction: column;
     margin-bottom: 50px;
+    gap: 25px;
 `;
 
 const GameLayoutHead = styled.div`
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
 `;
 
 const Solitaire = () => {
@@ -52,6 +52,7 @@ const Solitaire = () => {
             <KeyBindingProvider>
                 <GlobalStyle />
                 <GameLayout>
+                    <Controls />
                     <GameLayoutHead>
                         <Foundation />
                         <Stock />
