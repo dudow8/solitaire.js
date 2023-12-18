@@ -60,16 +60,17 @@ const Foundation = () => {
                         dragAndDrop.drop();
                     }}
                 >
-                    {foundation.piles[pile].map((card, key) =>
-                        <Card
-                            key={key}
-                            label={card.value}
-                            suit={card.suit}
-                            draggable
-                            ondrag={(e) => {
-                                ondrag(e, pile);
-                            }} />
-                    )}
+                    {foundation &&
+                        foundation.piles[pile].map((card, key) =>
+                            <Card
+                                key={key}
+                                label={card.value}
+                                suit={card.suit}
+                                draggable
+                                ondrag={(e) => {
+                                    ondrag(e, pile);
+                                }} />
+                        )}
                 </Pile>
             ))}
         </Container>

@@ -53,24 +53,23 @@ const FaceHeadline = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    font-family: 'Times New Roman', Times, serif;
     line-height: 50px;
 `;
 
 const FaceHeadlineLabel = styled.h1`
     padding: 0px;
     margin: 0px;
-    font-size: 60px;
-    font-weight: bold;
-    letter-spacing: -.4px;
+    font-size: 55px;
+    font-weight: lighter;
+    letter-spacing: -7px;
 `;
 const FaceHeadlineSuit = styled.span`
-    line-height: 40px;
-    font-size: 50px;
+    line-height: 50px;
+    font-size: 40px;
 `;
 const FaceSuit = styled.div`
     margin-bottom: 10px;
-    font-size : 160px;
+    font-size : 125px;
     line-height: 100px;
     text-align: center;
 `;
@@ -78,17 +77,10 @@ const FaceSuit = styled.div`
 const Back = styled.div`
     box-sizing: border-box;
     border: 4px solid #F6EEE0;
+    border-radius: 10px;
     width: 125px;
     height: 180px;
-    background-color: #091994;
-    background-image:
-        linear-gradient(135deg, #050A30 25%, transparent 25%),
-        linear-gradient(225deg, #050A30 25%, transparent 25%),
-        linear-gradient(45deg, #050A30 25%, transparent 25%),
-        linear-gradient(315deg, #050A30 25%, #091994 25%);
-    background-position:  10px 0, 10px 0, 0 0, 0 0;
-    background-size: 20px 20px;
-    background-repeat: repeat;
+    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='100%25' width='100%25'%3E%3Cdefs%3E%3Cpattern id='doodad' width='30' height='30' viewBox='0 0 40 40' patternUnits='userSpaceOnUse' patternTransform=''%3E%3Crect width='100%25' height='100%25' fill='rgba(42, 67, 101,1)'/%3E%3Cpath d='M0 29a 9-9 0 0 0 9-9a 11-11 0 0 1 11-11v2a-9 9 0 0 0-9 9a-11 11 0 0 1-11 11zM0 69a 9-9 0 0 0 9-9a 11-11 0 0 1 11-11v2a-9 9 0 0 0-9 9a-11 11 0 0 1-11 11z' fill='rgba(26, 32, 44,1)'/%3E%3Cpath d='M20 29.5a 9.5-9.5 0 0 0 9.5-9.5a 10.5-10.5 0 0 1 10.5-10.5v1a-9.5 9.5 0 0 0-9.5 9.5a-10.5 10.5 0 0 1-10.5 10.5z' fill='rgba(236, 201, 75,1)'/%3E%3C/pattern%3E%3C/defs%3E%3Crect fill='url(%23doodad)' height='200%25' width='200%25'/%3E%3C/svg%3E")
 `;
 
 export {

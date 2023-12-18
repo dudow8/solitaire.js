@@ -1,9 +1,13 @@
 const PUBSUB_TOPIC = 'event-store';
 const EVENTS = {
-    DROP_STORE: 'event-store/drop',
+    DROPPED: 'event-store/dropped',
 };
 
 const eventStore = (stream, pubsub) => {
+    const getEvents = () => {
+        return stream.getAll();
+    };
+
     const append = (event) => {
         if (event === null)
             throw 'error trying to append a null event to the store';
@@ -18,32 +22,10 @@ const eventStore = (stream, pubsub) => {
 
     const dropEventStore = () => {
         const event = {
-            type: EVENTS.DROP_STORE,
+            type: EVENTS.DROPPED,
         };
         stream.drop();
         pubsub.notify(PUBSUB_TOPIC, event);
-    };
-
-    const computeState = (state, events, reduces) => {
-        if (state === null || typeof state !== 'object') {
-            return null;
-        }
-
-        const stateObjectKeys = Object.keys(reduces);
-        return events.reduce((state, event) => {
-            return stateObjectKeys.reduce((snapshot, stateKey) => {
-                const reducer = reduces[stateKey][event.type];
-                const stateObject = Object.freeze(state[stateKey]);
-                if (reducer) {
-                    const obj = {
-                        ...snapshot,
-                        [stateKey]: reducer(stateObject, event),
-                    };
-                    return obj;
-                }
-                return snapshot;
-            }, state);
-        }, state);
     };
 
     const subscribe = (callback) => {
@@ -53,9 +35,9 @@ const eventStore = (stream, pubsub) => {
 
     return {
         append,
+        getEvents,
         subscribe,
         getEventStore,
-        computeState,
         dropEventStore,
     };
 }

@@ -1,3 +1,22 @@
+const {
+    Game,
+    Tableau,
+    Foundation,
+} = require('../../../model');
+const Projection = require('../../../commons/projection');
+
+const onCreate = () => ({
+    piles: {
+        1: [],
+        2: [],
+        3: [],
+        4: [],
+        5: [],
+        6: [],
+        7: [], 
+    },
+});
+
 const flipPileTopCard = (pile) => {
     if (pile.length) {
         const card = pile.slice(-1)[0];
@@ -71,9 +90,10 @@ const cardMovedFromTableauToFoundation = (state, { payload }) => {
 };
 
 module.exports = {
-    'solitaire/game-initialized': gameInitialized,
-    'tableau/card-stack-moved-between-tableau-piles': cardStackMovedBetweenTableauPiles,
-    'tableau/card-moved-from-stock-to-tableau': cardMovedFromStockToTableau,
-    'tableau/card-moved-from-foundation-to-tableau': cardMovedFromFoundationToTableau,
-    'foundation/card-moved-from-tableau-to-foundation': cardMovedFromTableauToFoundation,
+    [Projection.EVENTS.INITIALIZED]: onCreate,
+    [Game.EVENTS.GAME_INITIALIZED]: gameInitialized,
+    [Tableau.EVENTS.CARD_STACK_MOVED_BETWEEN_TABLEAU_PILES]: cardStackMovedBetweenTableauPiles,
+    [Tableau.EVENTS.CARD_MOVED_FROM_STOCK_TO_TABLEAU]: cardMovedFromStockToTableau,
+    [Tableau.EVENTS.CARD_MOVED_FROM_FOUNDATION_TO_TABLEAU]: cardMovedFromFoundationToTableau,
+    [Foundation.EVENTS.CARD_MOVED_FROM_TABLEAU_TO_FOUNDATION]: cardMovedFromTableauToFoundation,
 };

@@ -1,4 +1,5 @@
 const TableauProjection = require('./index');
+const Projection = require('../../../commons/projection');
 const { Game } = require('../../../model');
 
 describe('Projection/Tableau', () => {
@@ -29,6 +30,27 @@ describe('Projection/Tableau', () => {
         suit: 'spade',
         flipped: true,
     };
+
+    describe('onCreate()', () => {
+        const onCreate = TableauProjection[Projection.EVENTS.INITIALIZED];
+
+        test('should return the initial value', () => {
+            const state = onCreate();
+            const expected_state = {
+                piles: {
+                    1: [],
+                    2: [],
+                    3: [],
+                    4: [],
+                    5: [],
+                    6: [],
+                    7: [], 
+                },
+            };
+
+            expect(state).toEqual(expected_state);
+        });
+    });
 
     describe('gameInitialized', () => {
         const gameInitialized = TableauProjection['solitaire/game-initialized'];

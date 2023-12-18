@@ -1,7 +1,7 @@
 const StockProjection = require('./index');
+const Projection = require('../../../commons/projection');
 const {
     Game,
-    Stock,
     Tableau,
     Foundation,
 } = require('../../../model');
@@ -15,6 +15,24 @@ describe('Projection/Stock', () => {
     const heartAceCard = cardFactory(SET.ACE, SUITS.HEART);
     const heartTwoCard = cardFactory(SET.TWO, SUITS.HEART);
     const spadeTwoCard = cardFactory(SET.TWO, SUITS.SPADE);
+
+    describe('onCreate()', () => {
+        const onCreate = StockProjection[Projection.EVENTS.INITIALIZED];
+
+        test('should return the initial value', () => {
+            const state = onCreate();
+            const expected_state = {
+                active: {
+                    index: null,
+                    card: null,
+                },
+                pile: [],
+            };
+
+            expect(state).toEqual(expected_state);
+        });
+    });
+
 
     describe('gameInitialized()', () => {
         const gameInitialized = StockProjection[Game.EVENTS.GAME_INITIALIZED];

@@ -3,6 +3,16 @@ const {
     Tableau,
     Foundation,
 } = require('../../../model');
+const Projection = require('../../../commons/projection');
+
+const onCreate = () => ({
+    piles: {
+        1: [],
+        2: [],
+        3: [],
+        4: [],
+    }
+});
 
 const gameInitialized = (state, { payload }) => {
     const { foundation: piles } = payload;
@@ -39,6 +49,7 @@ const cardMovedFromFoundationToTableau = (state, { payload }) => {
 };
 
 module.exports = {
+    [Projection.EVENTS.INITIALIZED]: onCreate,
     [Game.EVENTS.GAME_INITIALIZED]: gameInitialized,
     [Foundation.EVENTS.CARD_MOVED_FROM_TABLEAU_TO_FOUNDATION]: cardMovedFromTableauToFoundation,
     [Foundation.EVENTS.CARD_MOVED_FROM_STOCK_TO_FOUNDATION]: cardMovedFromStockToFoundation,

@@ -4,6 +4,15 @@ const {
     Tableau,
     Foundation,
 } = require('../../../model');
+const Projection = require('../../../commons/projection');
+
+const onCreate = () => ({
+    active: {
+        index: null,
+        card: null,
+    },
+    pile: [],
+});
 
 const selectNextIndex = (pile, active_index) => {
     if (pile.length < 1) {
@@ -83,6 +92,7 @@ const cardMovedFromStockToFoundation = (state, { payload }) => {
 };
 
 module.exports = {
+    [Projection.EVENTS.INITIALIZED]: onCreate,
     [Game.EVENTS.GAME_INITIALIZED]: gameInitialized,
     [Stock.EVENTS.STOCK_CARD_FLIPPED]: stockCardFlipped,
     [Tableau.EVENTS.CARD_MOVED_FROM_STOCK_TO_TABLEAU]: cardMovedFromStockToTableau,

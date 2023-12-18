@@ -4,9 +4,10 @@ const memoryStorageStream = require('./memorystorage');
 const { eventStore } = require('./index');
 
 let _eventStore = null;
+const presentation = process.env.presentation;
 
 const getStream = () => {
-    if (process.env.presentation === 'web')
+    if (presentation === 'web')
         return localStorageStream.factory()
 
     return memoryStorageStream.factory();
@@ -14,7 +15,7 @@ const getStream = () => {
 
 const eventStoreFactory = () => {
     if (!_eventStore) {
-        const stream = getStream();
+        const stream = getStream(presentation);
         _eventStore = eventStore(stream, pubsub);
     }
 

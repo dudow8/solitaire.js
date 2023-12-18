@@ -4,6 +4,13 @@ const {
     Tableau,
     Foundation,
 } = require('../../../model');
+const Projection = require('../../../commons/projection');
+
+const onCreate = () => ({
+    score: 0,
+    moves: 0,
+    game_state: Game.STATE.NOT_STARTED,
+});
 
 const constraintMinScore = (score) => {
     if (score < 0) {
@@ -63,6 +70,7 @@ const cardMovedFromStockToTableau = (state, payload) => {
 };
 
 module.exports = {
+    [Projection.EVENTS.INITIALIZED]: onCreate,
     [Game.EVENTS.GAME_COMPLETED]: gameCompleted,
     [Game.EVENTS.GAME_INITIALIZED]: gameInitialized,
     [Stock.EVENTS.STOCK_CARD_FLIPPED]: stockCardFlipped,
