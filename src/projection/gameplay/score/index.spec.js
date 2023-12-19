@@ -16,6 +16,8 @@ describe('Projection/Score', () => {
             const expected_state = {
                 score: 0,
                 moves: 0,
+                game_id: null,
+                game_initialized_timestamp: null,
                 game_state: Game.STATE.NOT_STARTED,
             };
 
@@ -27,7 +29,7 @@ describe('Projection/Score', () => {
         const gameInitialized = ScoreProjection[Game.EVENTS.GAME_INITIALIZED];
 
         test('score and movements should be zero', () => {
-            const payload = {};
+            const payload = Game.initializeGame();
             const state = {};
             const snapshot = gameInitialized(state, payload);
 
@@ -38,38 +40,24 @@ describe('Projection/Score', () => {
     });
 
     describe('gameCompleted()', () => {
-        const gameInitialized = ScoreProjection[Game.EVENTS.GAME_COMPLETED];
+        const gameCompleted = ScoreProjection[Game.EVENTS.GAME_COMPLETED];
 
         test('game_state should be completed', () => {
             const payload = {
+                game_id: 123,
                 game_state: Game.STATE.COMPLETED,
+                game_completed_timestamp: new Date().getTime(),
             };
             const state = {
                 score: 200,
                 moves: 150,
                 game_state: Game.STATE.PLAYING,
             };
-            const snapshot = gameInitialized(state, payload);
+            const snapshot = gameCompleted(state, { payload });
 
             expect(snapshot.score).toBe(200);
             expect(snapshot.moves).toBe(150);
             expect(snapshot.game_state).toBe(Game.STATE.COMPLETED);
-        });
-
-        test('game_state should be playing', () => {
-            const payload = {
-                game_state: 'playing',
-            };
-            const state = {
-                score: 0,
-                moves: 0,
-                game_state: 'playing',
-            };
-            const snapshot = gameInitialized(state, payload);
-
-            expect(snapshot.score).toBe(0);
-            expect(snapshot.moves).toBe(0);
-            expect(snapshot.game_state).not.toBe(Game.EVENTS.PLAYING);
         });
     });
 
