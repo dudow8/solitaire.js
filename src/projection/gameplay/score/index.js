@@ -9,7 +9,9 @@ const Projection = require('../../../commons/projection');
 const onCreate = () => ({
     score: 0,
     moves: 0,
+    game_id: null,
     game_state: Game.STATE.NOT_STARTED,
+    game_initialized_timestamp: null,
 });
 
 const constraintMinScore = (score) => {
@@ -19,51 +21,56 @@ const constraintMinScore = (score) => {
     return score;
 }
 
-const gameInitialized = (state, payload) => {
+const gameInitialized = (state, { payload }) => {
+    const { game_initialized_timestamp, game_id } = payload;
     return {
         score: 0,
         moves: 0,
+        game_id,
         game_state: Game.STATE.PLAYING,
+        game_initialized_timestamp,
     };
 };
 
-const gameCompleted = (state, payload) => {
+const gameCompleted = (state, { payload }) => {
+    const { game_completed_timestamp } = payload;
     return {
         ...state,
         game_state: Game.STATE.COMPLETED,
+        game_completed_timestamp,
     }
 };
 
-const stockCardFlipped = (state, payload) => {
+const stockCardFlipped = (state, { payload }) => {
     const moves = state.moves + 1;
     return { ...state, moves };
 };
 
-const cardMovedFromStockToFoundation = (state, payload) => {
+const cardMovedFromStockToFoundation = (state, { payload }) => {
     const score = state.score + 10;
     const moves = state.moves + 1;
     return { ...state, score, moves };
 };
 
-const cardMovedFromTableauToFoundation = (state, payload) => {
+const cardMovedFromTableauToFoundation = (state, { payload }) => {
     const score = state.score + 10;
     const moves = state.moves + 1;
     return { ...state, score, moves };
 };
 
-const cardMovedFromFoundationToTableau = (state, payload) => {
+const cardMovedFromFoundationToTableau = (state, { payload }) => {
     const score = constraintMinScore(state.score - 15);
     const moves = state.moves + 1;
     return { ...state, score, moves };
 };
 
-const cardStackMovedBetweenTableauPiles = (state, payload) => {
+const cardStackMovedBetweenTableauPiles = (state, { payload }) => {
     const score = state.score + 5;
     const moves = state.moves + 1;
     return { ...state, score, moves };
 };
 
-const cardMovedFromStockToTableau = (state, payload) => {
+const cardMovedFromStockToTableau = (state, { payload }) => {
     const score = state.score + 5;
     const moves = state.moves + 1;
     return { ...state, score, moves };

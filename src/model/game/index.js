@@ -15,12 +15,15 @@ const EVENTS = {
 };
 
 const initializeGame = () => {
+    const game_id = new Date().getTime();
     const card_pack = shuffleCards(cards);
     return {
         type: EVENTS.GAME_INITIALIZED,
         payload: {
+            game_id,
             card_pack,
             game_state: STATE.PLAYING,
+            game_initialized_timestamp: new Date().getTime(),
             stock: card_pack.slice(28),
             foundation: {
                 1: [],
@@ -53,6 +56,7 @@ const completeGame = (state) => {
             type: EVENTS.GAME_COMPLETED,
             payload: {
                 game_state: STATE.COMPLETED,
+                game_completed_timestamp: new Date().getTime(),
             },
         }
     };

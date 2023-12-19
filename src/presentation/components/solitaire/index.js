@@ -14,6 +14,7 @@ const GlobalStyle = createGlobalStyle`
         width: 100vw;
         min-height: 100vh;
         font-family: sans-serif;
+        background-color: #1A4314;
     }
 
     #root {
@@ -21,16 +22,13 @@ const GlobalStyle = createGlobalStyle`
         min-height: 100vh;
         margin: 0px;
         padding: 0px;
-        background-color: #1A4314;
         display: flex;
         justify-content: center;
         overflow: hidden;
 
-        > div {
-            /* zoom: 64%; */
-            /* transform: scale(60%) translateX(20%); */
-            /* transform-origin: top left; */
-        }
+        /* zoom: 64%; */
+        /* transform: scale(100%); */
+        /* transform-origin: top center; */
     }
 `;
 
